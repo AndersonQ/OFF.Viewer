@@ -1,0 +1,17 @@
+A aplicação em C++ usando Qt e OpenGL deverá ser capaz de:
+
+    Ler de um arquivo OFF ou PLY os dados necessários para apresentação e manipulação da superfície;
+    Permitir ao usuário definir o tipo de projeção (perspectiva simétrica/ortogonal);
+    Definir o tipo de iluminação (Flat/Gouraud);
+    Definir o tipo de visualização (wireframe/preenchida) -> remoção de superfícies ocultas;
+    Permitir interação com o mouse (trackball -- rotação, zoom) e teclado (wireframe, projeção, ...);
+    Definir cor de fundo;
+    Permitir ajuste de parâmetros de câmera e de iluminação;
+
+Vejam exemplos de visualizadores:
+
+http://meshlab.sourceforge.net/
+http://www.geomview.org/
+O trabalho é INDIVIDUAL e a forma de avaliação será através de apresentação ao professor no dia 29/03, explicando detalhes da implementação e do funcionamento do código.
+
+LEMBRE-SE de fazer upload do projeto Qt para o Tidia.
