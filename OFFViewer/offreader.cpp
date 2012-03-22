@@ -6,45 +6,53 @@ OFFReader::OFFReader(char *name)
 {
     //Open file
     file_name = name;
-    off = fopen(name, "r");
+    off = fopen(file_name, "r");
 
-
-    if(!off)
+    if(off == 0x0)
         printf("ERROR: Can not open file %s\n", name); //Error if can't open file
     else{
-        fscanf(off,"%s", line1);
-        if(strcmp(line1, "OFF") != 0)
-            printf("File %s is not a OFF file!", name);
+        fscanf(off,"%c%c%c\n",&l1,&l2,&l3);
+        if(l1 != 'O' && l2 != 'F' && l3 != 'F'){//strcmp(line1, "OFF") == 0)
+            printf("ERROR: File \"%s\" is not a OFF file!", name);
+            fflush(stdout);
+            exit(1);
+        }
     }
+
+    /* Debug */
+    printf("File \"%s\" is a OFF\n", name);
+    fflush(stdout);
 
     readoff();
 }
 
 OFFReader::~OFFReader(){
 
-    /* Frees the memory space alocatede to vertives*/
+    /* Frees the memory space alocatede to vertives */
     if(vertices){
         for(int i = 0; i < num_vertices; i++)
             free(vertices[i]);
         free(vertices);
     }
 
-    /* Frees the memory space alocatede to faces*/
+    /* Frees the memory space alocatede to faces */
     if(vertices){
         for(int i = 0; i < num_faces; i++)
             free(faces[i]);
         free(faces);
     }
-
-
 }
 
 
 void OFFReader::readoff(){
-    int read;
+    int read, n, line = 2;
 
     /* Read number of vertex, face and edge */
-    fscanf(off, "%d,%d,%d", &num_vertices, &num_faces, &num_edge);
+    read = fscanf(off, "%d %d %d\n", &num_vertices, &num_faces, &num_edge);
+    /* Degub */
+    printf("%d num_vertices = %d, num_faces = %d, num_edge = %d, read = %d\n", line ++, num_vertices, num_faces, num_edge, read);
+    fflush(stdout);
+
 
     /* Alocate the array of vertices */
     vertices = (float **) malloc(sizeof(float*)*num_vertices);
@@ -67,31 +75,36 @@ void OFFReader::readoff(){
         ALOCATED(faces[i])
     }
 
+
     /* Set Locale to use dot like a decimal separator */
-    setlocale(LC_ALL, "C.UTF-8");
+    setlocale(LC_ALL, "en_US.utf8");
 
     /* Reading the vertices */
     for(int i = 0; i < num_vertices; i++){
-        read = fscanf(off, "%f,%f,%f", &(vertices[i][0]), &(vertices[i][1]), &(vertices[i][2]));
+        read = fscanf(off, "%f %f %f \n", &(vertices[i][0]), &(vertices[i][1]), &(vertices[i][2]));
 
         /* Degub */
-        printf("Vertex[%d] = (%f,%f,%f) read = %d\n", i, vertices[i][0], vertices[i][1], vertices[i][2], read);
+        printf("%d Vertex[%d] = (%f, %f, %f) read = %d\n",line++ , i, vertices[i][0], vertices[i][1], vertices[i][2], read);
+        fflush(stdout);
 
         if (read != 3){
-            printf("ERROR: Reading file \"%s\", format is invalid!", file_name);
+            printf("ERROR: Reading file \"%s\", format is invalid!\n", file_name);
+            fflush(stdout);
             exit(1);
         }
     }
 
     /* Reading the faces */
     for(int i = 0; i < num_faces; i++){
-        read = fscanf(off, "%d,%d,%d", &(faces[i][0]), &(faces[i][1]), &(faces[i][2]));
+        read = fscanf(off, "%d %d %d %d\n", &n, &(faces[i][0]), &(faces[i][1]), &(faces[i][2]));
 
         /* Degub */
-        printf("Face[%d] = (%d,%d,%d) read = %d\n", i, faces[i][0], faces[i][1], faces[i][2], read);
+        printf("%d Face[%d] = (%d %d, %d, %d) read = %d\n",line++, i, n, faces[i][0], faces[i][1], faces[i][2], read);
+        fflush(stdout);
 
-        if (read != 3){
-            printf("ERROR: Reading file \"%s\", format is invalid!", file_name);
+        if (read != 4 || n != 3){
+            printf("ERROR: Reading file \"%s\", format is invalid!\n", file_name);
+            fflush(stdout);
             exit(1);
         }
     }

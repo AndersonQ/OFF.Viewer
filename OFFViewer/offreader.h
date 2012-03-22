@@ -19,7 +19,7 @@ protected:
     char *file_name;
     int num_vertices, num_faces, num_edge, **faces;
     float **vertices;
-    char *line1;
+    char l1, l2, l3;
 };
 
 #endif // OFFREADER_H
