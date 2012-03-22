@@ -13,10 +13,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     offreader.cpp \
-    opengl.cpp
+    opengl.cpp \
+    camera.cpp
 
 HEADERS  += mainwindow.h \
     offreader.h \
-    opengl.h
+    opengl.h \
+    camera.h
 
 FORMS    += mainwindow.ui
