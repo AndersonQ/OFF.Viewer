@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui opengl
 
 TARGET = OFFViewer
 TEMPLATE = app
@@ -12,9 +12,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    offreader.cpp
+    offreader.cpp \
+    opengl.cpp
 
 HEADERS  += mainwindow.h \
-    offreader.h
+    offreader.h \
+    opengl.h
 
 FORMS    += mainwindow.ui
