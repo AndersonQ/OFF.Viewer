@@ -20,6 +20,25 @@ OFFReader::OFFReader(char *name)
     readoff();
 }
 
+OFFReader::~OFFReader(){
+
+    /* Frees the memory space alocatede to vertives*/
+    if(vertices){
+        for(int i = 0; i < num_vertices; i++)
+            free(vertices[i]);
+        free(vertices);
+    }
+
+    /* Frees the memory space alocatede to faces*/
+    if(vertices){
+        for(int i = 0; i < num_faces; i++)
+            free(faces[i]);
+        free(faces);
+    }
+
+
+}
+
 
 void OFFReader::readoff(){
     int read;

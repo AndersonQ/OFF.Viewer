@@ -10,6 +10,8 @@ class OFFReader
 {
 public:
     OFFReader(char *name);
+    ~OFFReader();
+
     void readoff();
 
 protected:
