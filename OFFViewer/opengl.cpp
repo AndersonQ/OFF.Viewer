@@ -3,6 +3,7 @@
 OpenGL::OpenGL(QWidget *parent) :
     QGLWidget(parent)
 {
+    wireframe = true;
 }
 
 void OpenGL::initializeGL(){
@@ -113,9 +114,9 @@ void OpenGL::paintGL(){
     m_shaderProgram->enableAttributeArray("vColour");
     m_shaderProgram->setAttributeBuffer("vColour", GL_FLOAT, 0, 3, 0);
 
-    //if(wireframe)
+    if(wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    //else
+    else
         //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     glDrawArrays(GL_TRIANGLES, 0, offr->num_faces * 3);
@@ -235,4 +236,22 @@ void OpenGL::Setb(double n){
 
 void OpenGL::SetAnglefovy(double n){
     camera.fovy = n;
+}
+
+void OpenGL::SetWireframe(bool b){
+    wireframe = b;
+}
+
+void OpenGL::SetCullface(bool c)
+{
+    if(c)
+        glEnable(GL_CULL_FACE);
+    else
+        glDisable(GL_CULL_FACE);
+}
+
+void OpenGL::SetOnecolour(bool b){
+}
+
+void OpenGL::SetColourgray(bool b){
 }

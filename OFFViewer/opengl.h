@@ -40,6 +40,8 @@ protected:
 
     QTimer *timer;
 
+    bool wireframe;
+
     float rotatey;
 
     /* Functions */
@@ -75,6 +77,10 @@ public slots:
     void SetUpx(double n);
     void SetUpy(double n);
     void SetUpz(double n);
+    void SetWireframe(bool b);
+    void SetCullface(bool c);
+    void SetOnecolour(bool b);
+    void SetColourgray(bool b);
 
 };
 
