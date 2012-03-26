@@ -12,10 +12,10 @@ void OpenGL::initializeGL(){
     GetFaces(offr);
 
     ModelView.setToIdentity();
-    Projection.setToIdentity();
+    MatrixProjection.setToIdentity();
 
-    Projection.ortho(-2, 2, -2, 2, -4, 4);
-    Projection.lookAt(camera.eye,camera.at,camera.up);
+    MatrixProjection.ortho(-2, 2, -2, 2, -4, 4);
+    MatrixProjection.lookAt(camera.eye,camera.at,camera.up);
 
     /* Initialize shaders */
     m_vertexShader = new QGLShader(QGLShader::Vertex);
@@ -81,17 +81,27 @@ void OpenGL::paintGL(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.0, 0.0, 0.0, 1.0);
 
-    /* put more projections */
-    Projection.ortho(-2, 2, -2, 2, -4, 4);
+    /* Set projections */
+    switch(camera.projection)
+    {
+        case ORTHO:
+            MatrixProjection.ortho(camera.left, camera.right, camera.bottom, camera.top, camera.nearplane, camera.farplane);
+            break;
+        case PERSPECTIVE:
+            MatrixProjection.perspective(camera.fovy, (camera.a/camera.b), camera.nearplane, camera.farplane);
+            break;
+        case FRUSTUM:
+            MatrixProjection.frustum(camera.left, camera.right, camera.bottom, camera.top, camera.nearplane, camera.farplane);
+            break;
+    }
 
     ModelView.setToIdentity();
     ModelView.lookAt(camera.eye, camera.at, camera.up);
     ModelView.rotate(rotatey,0,1,0);
-    Normal.setToIdentity();
 
-    m_shaderProgram->setUniformValue("Projection", Projection);
+    m_shaderProgram->setUniformValue("Projection", MatrixProjection);
     m_shaderProgram->setUniformValue("ModelView", ModelView);
-    m_shaderProgram->setUniformValue("NormalMatrix", Normal);
+    //m_shaderProgram->setUniformValue("NormalMatrix", Normal);
 
     /* VBO of vertex */
     m_vboVertices->bind();
@@ -148,4 +158,81 @@ void OpenGL::GetFaces(OFFReader *offr){
 void OpenGL::Spin(){
     rotatey = (rotatey<360 ? rotatey+0.02 : 360-rotatey);
     updateGL();
+}
+
+/* Slots */
+void OpenGL::SetProjection(int p){
+    camera.projection = p;
+}
+
+void OpenGL::SetLeft(double n){
+    camera.left = n;
+}
+
+void OpenGL::SetRight(double n){
+    camera.right = n;
+}
+
+void OpenGL::Setbottom(double n){
+    camera.bottom = n;
+}
+
+void OpenGL::SetTop(double n){
+    camera.top = n;
+}
+
+void OpenGL::SetNearplane(double n){
+    camera.nearplane = n;
+}
+
+void OpenGL::SetFarplane(double n){
+    camera.farplane = n;
+}
+
+void OpenGL::SetEyex(double n){
+    camera.eye.setX(n);
+}
+
+void OpenGL::SetEyey(double n){
+    camera.eye.setY(n);
+}
+
+void OpenGL::SetEyez(double n){
+    camera.eye.setZ(n);
+}
+
+void OpenGL::SetLookatx(double n){
+    camera.at.setX(n);
+}
+
+void OpenGL::SetLookaty(double n){
+    camera.at.setY(n);
+}
+
+void OpenGL::SetLookatz(double n){
+    camera.at.setZ(n);
+}
+
+void OpenGL::SetUpx(double n){
+    camera.up.setX(n);
+}
+
+void OpenGL::SetUpy(double n){
+    camera.up.setY(n);
+}
+
+void OpenGL::SetUpz(double n){
+    camera.up.setZ(n);
+}
+
+void OpenGL::Seta(double n){
+    camera.a = n;
+}
+
+void OpenGL::Setb(double n){
+    camera.b = n;
+}
+
+void OpenGL::SetAnglefovy(double n){
+    camera.fovy = n;
 }

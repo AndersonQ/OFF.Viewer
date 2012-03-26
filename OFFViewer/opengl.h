@@ -34,8 +34,7 @@ protected:
     QVector3D *colours;
     int num_vertices, num_faces, num_edge;
 
-    QMatrix4x4 ModelView, Projection;
-    QMatrix3x3 Normal;
+    QMatrix4x4 ModelView, MatrixProjection;
 
     Camera camera;
 
@@ -57,6 +56,25 @@ signals:
 
 public slots:
     void Spin();
+    void SetProjection(int p);
+    void SetLeft(double n);
+    void SetRight(double n);
+    void Setbottom(double n);
+    void SetTop(double n);
+    void SetNearplane(double n);
+    void SetFarplane(double n);
+    void Seta(double n);
+    void Setb(double n);
+    void SetAnglefovy(double n);
+    void SetEyex(double n);
+    void SetEyey(double n);
+    void SetEyez(double n);
+    void SetLookatx(double n);
+    void SetLookaty(double n);
+    void SetLookatz(double n);
+    void SetUpx(double n);
+    void SetUpy(double n);
+    void SetUpz(double n);
 
 };
 
