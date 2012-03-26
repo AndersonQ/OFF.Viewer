@@ -13,12 +13,19 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     offreader.cpp \
-    opengl.cpp \
-    camera.cpp
+    camera.cpp \
+    opengl.cpp
 
 HEADERS  += mainwindow.h \
     offreader.h \
-    opengl.h \
-    camera.h
+    camera.h \
+    opengl.h
 
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    shaders.qrc
+
+OTHER_FILES += \
+    fshader.glsl \
+    vshader.glsl

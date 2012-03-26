@@ -43,7 +43,6 @@ OFFReader::~OFFReader(){
     }
 }
 
-
 void OFFReader::readoff(){
     int read, n, line = 2;
 

@@ -6,37 +6,57 @@
 #include <QGLShader>
 #include <QGLBuffer>
 #include <QVector3D>
+#include <QTimer>
+
+#include "camera.h"
+#include "offreader.h"
 
 class OpenGL : public QGLWidget
 {
     Q_OBJECT
 public:
-    explicit OpenGL(QObject *parent = 0);
+    explicit OpenGL(QWidget *parent = 0);
 
 protected:
     /* Variables */
+    OFFReader *offr;
+
     QGLShader *m_vertexShader;
     QGLShader *m_fragmentShader;
     QGLShaderProgram *m_shaderProgram;
 
     QGLBuffer *m_vboVertices;
     QGLBuffer *m_vboNormals;
-    QGLBuffer *m_vboColors;
+    QGLBuffer *m_vboColours;
     QGLBuffer *m_vboIndices;
 
-    QVector4D *verticesphere;
-    QVector3D *normalsphere;
-    unsigned int num_vertices, num_faces, num_edge;
+    QVector3D *faces;
+    QVector3D *colours;
+    int num_vertices, num_faces, num_edge;
 
-    QMatrix3x3 ModelView, Projection, Normal;
+    QMatrix4x4 ModelView, Projection;
+    QMatrix3x3 Normal;
 
+    Camera camera;
+
+    QTimer *timer;
+
+    float rotatey;
 
     /* Functions */
     void initializeGL();
+    void paintGL();
+
+    void InitializeVBOs();
+
+    void initializeMode1();
+
+    void GetFaces(OFFReader *offr);
 
 signals:
 
 public slots:
+    void Spin();
 
 };
 

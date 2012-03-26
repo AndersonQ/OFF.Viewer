@@ -8,7 +8,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    OFFReader *offr = new OFFReader((char *)"/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/sphere.off");
 }
 
 MainWindow::~MainWindow()
