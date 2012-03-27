@@ -14,9 +14,12 @@ void OpenGL::initializeGL(){
 
     ModelView.setToIdentity();
     MatrixProjection.setToIdentity();
+    MatrixRotation.setToIdentity();
 
     MatrixProjection.ortho(-2, 2, -2, 2, -4, 4);
     MatrixProjection.lookAt(camera.eye,camera.at,camera.up);
+
+    ModelView.scale(0.5);
 
     /* Initialize shaders */
     m_vertexShader = new QGLShader(QGLShader::Vertex);
@@ -81,6 +84,17 @@ void OpenGL::paintGL(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.0, 0.0, 0.0, 1.0);
 
+    //bool db = false;
+
+    ModelView.setToIdentity();
+    ModelView.scale(0.5);
+    MatrixProjection.setToIdentity();
+
+    ModelView.lookAt(camera.eye, camera.at, camera.up);
+
+    MatrixRotation.setToIdentity();
+    MatrixRotation.rotate(rotatey,0,1,0);
+
     /* Set projections */
     switch(camera.projection)
     {
@@ -91,15 +105,9 @@ void OpenGL::paintGL(){
             MatrixProjection.perspective(camera.fovy, (camera.a/camera.b), camera.nearplane, camera.farplane);
             break;
         case FRUSTUM:
-            MatrixProjection.frustum(camera.left, camera.right, camera.bottom, camera.top, camera.nearplane, camera.farplane);
+            MatrixProjection.frustum((qreal)camera.left, (qreal)camera.right, (qreal)camera.bottom, (qreal)camera.top, (qreal)camera.nearplane, (qreal)camera.farplane);
             break;
     }
-
-    ModelView.setToIdentity();
-    ModelView.lookAt(camera.eye, camera.at, camera.up);
-
-    MatrixRotation.setToIdentity();
-    MatrixRotation.rotate(rotatey,0,1,0);
 
     m_shaderProgram->setUniformValue("MatrixProjection", MatrixProjection);
     m_shaderProgram->setUniformValue("MatrixModelView", ModelView);
@@ -163,6 +171,9 @@ void OpenGL::Spin(){
 /* Slots */
 void OpenGL::SetProjection(int p){
     camera.projection = p;
+    /* DEBUG */
+    printf("camera.projection = %d\n", camera.projection);
+    fflush(stdout);
     updateGL();
 }
 
