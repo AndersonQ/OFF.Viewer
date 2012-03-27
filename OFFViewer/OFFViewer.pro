@@ -14,12 +14,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     offreader.cpp \
     camera.cpp \
-    opengl.cpp
+    opengl.cpp \
+    trackball.cpp
 
 HEADERS  += mainwindow.h \
     offreader.h \
     camera.h \
-    opengl.h
+    opengl.h \
+    trackball.h
 
 FORMS    += mainwindow.ui
 
