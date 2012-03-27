@@ -75,7 +75,6 @@ void OpenGL::InitializeVBOs(){
     m_vboColours->allocate(colours, offr->num_faces * 3 * sizeof(QVector3D));
     delete[] colours;
     colours = NULL;
-
 }
 
 void OpenGL::paintGL(){
@@ -164,82 +163,102 @@ void OpenGL::Spin(){
 /* Slots */
 void OpenGL::SetProjection(int p){
     camera.projection = p;
+    updateGL();
 }
 
 void OpenGL::SetLeft(double n){
     camera.left = n;
+    updateGL();
 }
 
 void OpenGL::SetRight(double n){
     camera.right = n;
+    updateGL();
 }
 
 void OpenGL::Setbottom(double n){
     camera.bottom = n;
+    updateGL();
 }
 
 void OpenGL::SetTop(double n){
     camera.top = n;
+    updateGL();
 }
 
 void OpenGL::SetNearplane(double n){
     camera.nearplane = n;
+    updateGL();
 }
 
 void OpenGL::SetFarplane(double n){
     camera.farplane = n;
+    updateGL();
 }
 
 void OpenGL::SetEyex(double n){
     camera.eye.setX(n);
+    updateGL();
 }
 
 void OpenGL::SetEyey(double n){
     camera.eye.setY(n);
+    updateGL();
 }
 
 void OpenGL::SetEyez(double n){
     camera.eye.setZ(n);
+    updateGL();
 }
 
 void OpenGL::SetLookatx(double n){
     camera.at.setX(n);
+    updateGL();
 }
 
 void OpenGL::SetLookaty(double n){
     camera.at.setY(n);
+    updateGL();
 }
 
 void OpenGL::SetLookatz(double n){
     camera.at.setZ(n);
+    updateGL();
 }
 
 void OpenGL::SetUpx(double n){
     camera.up.setX(n);
+    updateGL();
 }
 
 void OpenGL::SetUpy(double n){
     camera.up.setY(n);
+    updateGL();
 }
 
 void OpenGL::SetUpz(double n){
     camera.up.setZ(n);
+    updateGL();
 }
 
 void OpenGL::Seta(double n){
     camera.a = n;
+    updateGL();
 }
 
 void OpenGL::Setb(double n){
     camera.b = n;
+    updateGL();
 }
 
 void OpenGL::SetAnglefovy(double n){
     camera.fovy = n;
+    updateGL();
 }
 
 void OpenGL::SetWireframe(bool b){
     wireframe = b;
+    updateGL();
 }
 
 void OpenGL::SetCullface(bool c)
@@ -248,10 +267,14 @@ void OpenGL::SetCullface(bool c)
         glEnable(GL_CULL_FACE);
     else
         glDisable(GL_CULL_FACE);
+
+    updateGL();
 }
 
 void OpenGL::SetOnecolour(bool b){
+    updateGL();
 }
 
 void OpenGL::SetColourgray(bool b){
+    updateGL();
 }
