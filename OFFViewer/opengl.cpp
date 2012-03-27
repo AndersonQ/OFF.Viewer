@@ -3,7 +3,7 @@
 OpenGL::OpenGL(QWidget *parent) :
     QGLWidget(parent)
 {
-    wireframe = true;
+    wireframe = false;
 }
 
 void OpenGL::initializeGL(){
@@ -11,14 +11,14 @@ void OpenGL::initializeGL(){
 
     offr = new OFFReader((char *) "/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/cube.off");
 
-    /* Initialize Matrix like identity matrix */
+    /* Initialize all Matrix like identity matrix */
     ModelView.setToIdentity();
     MatrixProjection.setToIdentity();
     MatrixRotation.setToIdentity();
 
     /* Default projection */
     MatrixProjection.ortho(-2, 2, -2, 2, -4, 4);
-    MatrixProjection.lookAt(camera.eye,camera.at,camera.up);
+    MatrixProjection.lookAt(camera.eye,camera.at,camera.up);//QVector3D(0.0, 0.0, 2), QVector3D(0.0, 0.0, 0.0), QVector3D(0.0, 1.0, 0.0));
 
     /* Default scale */
     ModelView.scale(0.5);
@@ -59,12 +59,12 @@ void OpenGL::InitializeVBOs(){
 
     /* Initialize vertex's colours */
     for(int i = 0; i < offr->num_faces*3; i++)
-        colours[i] = QVector3D(0.8, 0.8, 0.8);
-        /*colours[i] = QVector3D(rand()/(float)(RAND_MAX),
+        //colours[i] = QVector3D(0.8, 0.8, 0.8);
+        colours[i] = QVector3D(rand()/(float)(RAND_MAX),
                                rand()/(float)(RAND_MAX),
-                               rand()/(float)(RAND_MAX));*/
+                               rand()/(float)(RAND_MAX));
 
-    /* Creat VBos to vertices */
+    /* Creat VBO to vertices */
     m_vboVertices = new QGLBuffer(QGLBuffer::VertexBuffer);
     m_vboVertices->create();
     m_vboVertices->bind();
@@ -73,7 +73,7 @@ void OpenGL::InitializeVBOs(){
     delete[] faces;
     faces = NULL;
 
-    /* Creat VBos to colours */
+    /* Creat VBO to colours */
     m_vboColours = new QGLBuffer(QGLBuffer::VertexBuffer);
     m_vboColours->create();
     m_vboColours->bind();
@@ -92,15 +92,6 @@ void OpenGL::paintGL(){
     MatrixProjection.setToIdentity();
     MatrixRotation.setToIdentity();
 
-    /* TODO: Put a zoom atribute */
-    ModelView.scale(0.5);
-
-    /* Set lookat */
-    ModelView.lookAt(camera.eye, camera.at, camera.up);
-
-    /* Set rotation */
-    MatrixRotation.rotate(rotatey,0,1,0);
-
     /* Set projections */
     switch(camera.projection)
     {
@@ -115,6 +106,16 @@ void OpenGL::paintGL(){
             break;
     }
 
+    /* TODO: Put a variable zoom */
+    ModelView.scale(0.5);
+
+    /* Set lookat */
+    ModelView.lookAt(camera.eye, camera.at, camera.up);
+
+    /* Set rotation */
+    MatrixRotation.rotate(rotatey,0,1,0);
+
+    /* Send matrix to shader */
     m_shaderProgram->setUniformValue("MatrixProjection", MatrixProjection);
     m_shaderProgram->setUniformValue("MatrixModelView", ModelView);
     m_shaderProgram->setUniformValue("MatrixRotation", MatrixRotation);
@@ -177,105 +178,82 @@ void OpenGL::Spin(){
 /* Slots */
 void OpenGL::SetProjection(int p){
     camera.projection = p;
-    /* DEBUG */
-    printf("camera.projection = %d\n", camera.projection);
-    fflush(stdout);
-    updateGL();
 }
 
 void OpenGL::SetLeft(double n){
     camera.left = n;
-    updateGL();
 }
 
 void OpenGL::SetRight(double n){
     camera.right = n;
-    updateGL();
 }
 
 void OpenGL::Setbottom(double n){
     camera.bottom = n;
-    updateGL();
 }
 
 void OpenGL::SetTop(double n){
     camera.top = n;
-    updateGL();
 }
 
 void OpenGL::SetNearplane(double n){
     camera.nearplane = n;
-    updateGL();
 }
 
 void OpenGL::SetFarplane(double n){
     camera.farplane = n;
-    updateGL();
 }
 
 void OpenGL::SetEyex(double n){
     camera.eye.setX(n);
-    updateGL();
 }
 
 void OpenGL::SetEyey(double n){
     camera.eye.setY(n);
-    updateGL();
 }
 
 void OpenGL::SetEyez(double n){
     camera.eye.setZ(n);
-    updateGL();
 }
 
 void OpenGL::SetLookatx(double n){
     camera.at.setX(n);
-    updateGL();
 }
 
 void OpenGL::SetLookaty(double n){
     camera.at.setY(n);
-    updateGL();
 }
 
 void OpenGL::SetLookatz(double n){
     camera.at.setZ(n);
-    updateGL();
 }
 
 void OpenGL::SetUpx(double n){
     camera.up.setX(n);
-    updateGL();
 }
 
 void OpenGL::SetUpy(double n){
     camera.up.setY(n);
-    updateGL();
 }
 
 void OpenGL::SetUpz(double n){
     camera.up.setZ(n);
-    updateGL();
 }
 
 void OpenGL::Seta(double n){
     camera.a = n;
-    updateGL();
 }
 
 void OpenGL::Setb(double n){
     camera.b = n;
-    updateGL();
 }
 
 void OpenGL::SetAnglefovy(double n){
     camera.fovy = n;
-    updateGL();
 }
 
 void OpenGL::SetWireframe(bool b){
     wireframe = b;
-    updateGL();
 }
 
 void OpenGL::SetCullface(bool c)
@@ -284,14 +262,10 @@ void OpenGL::SetCullface(bool c)
         glEnable(GL_CULL_FACE);
     else
         glDisable(GL_CULL_FACE);
-
-    updateGL();
 }
 
 void OpenGL::SetOnecolour(bool b){
-    updateGL();
 }
 
 void OpenGL::SetColourgray(bool b){
-    updateGL();
 }

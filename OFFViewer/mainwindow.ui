@@ -66,6 +66,9 @@
        <property name="maximum">
         <double>100.000000000000000</double>
        </property>
+       <property name="singleStep">
+        <double>0.100000000000000</double>
+       </property>
        <property name="value">
         <double>5.000000000000000</double>
        </property>
@@ -101,6 +104,9 @@
        <property name="maximum">
         <double>100.000000000000000</double>
        </property>
+       <property name="singleStep">
+        <double>0.100000000000000</double>
+       </property>
       </widget>
       <widget class="QDoubleSpinBox" name="doubleSpinBox_23">
        <property name="geometry">
@@ -116,6 +122,9 @@
        </property>
        <property name="maximum">
         <double>100.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.100000000000000</double>
        </property>
       </widget>
       <widget class="QDoubleSpinBox" name="doubleSpinBox_20">
@@ -133,6 +142,9 @@
        <property name="maximum">
         <double>100.000000000000000</double>
        </property>
+       <property name="singleStep">
+        <double>0.100000000000000</double>
+       </property>
       </widget>
       <widget class="QDoubleSpinBox" name="doubleSpinBox_24">
        <property name="geometry">
@@ -148,6 +160,9 @@
        </property>
        <property name="maximum">
         <double>100.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.100000000000000</double>
        </property>
       </widget>
       <widget class="QDoubleSpinBox" name="doubleSpinBox_25">
@@ -165,6 +180,9 @@
        <property name="maximum">
         <double>100.000000000000000</double>
        </property>
+       <property name="singleStep">
+        <double>0.100000000000000</double>
+       </property>
       </widget>
       <widget class="QDoubleSpinBox" name="doubleSpinBox_21">
        <property name="geometry">
@@ -180,6 +198,9 @@
        </property>
        <property name="maximum">
         <double>100.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.100000000000000</double>
        </property>
       </widget>
       <widget class="QDoubleSpinBox" name="doubleSpinBox_18">
@@ -197,6 +218,9 @@
        <property name="maximum">
         <double>100.000000000000000</double>
        </property>
+       <property name="singleStep">
+        <double>0.100000000000000</double>
+       </property>
       </widget>
       <widget class="QDoubleSpinBox" name="doubleSpinBox_26">
        <property name="geometry">
@@ -212,6 +236,9 @@
        </property>
        <property name="maximum">
         <double>100.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.100000000000000</double>
        </property>
       </widget>
       <widget class="QLabel" name="label_21">
@@ -342,6 +369,9 @@
         <property name="maximum">
          <double>100.000000000000000</double>
         </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
         <property name="value">
          <double>10.000000000000000</double>
         </property>
@@ -360,6 +390,9 @@
         </property>
         <property name="maximum">
          <double>100.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
         </property>
         <property name="value">
          <double>4.000000000000000</double>
@@ -428,6 +461,9 @@
         <property name="maximum">
          <double>100.000000000000000</double>
         </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
         <property name="value">
          <double>-2.000000000000000</double>
         </property>
@@ -446,6 +482,9 @@
         </property>
         <property name="maximum">
          <double>100.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
         </property>
         <property name="value">
          <double>2.000000000000000</double>
@@ -498,6 +537,9 @@
         <property name="maximum">
          <double>100.000000000000000</double>
         </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
         <property name="value">
          <double>-2.000000000000000</double>
         </property>
@@ -516,6 +558,9 @@
         </property>
         <property name="maximum">
          <double>100.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
         </property>
         <property name="value">
          <double>2.000000000000000</double>
@@ -615,6 +660,9 @@
         <property name="minimum">
          <double>-100.000000000000000</double>
         </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
         <property name="value">
          <double>4.000000000000000</double>
         </property>
@@ -649,6 +697,9 @@
         </property>
         <property name="maximum">
          <double>100.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
         </property>
         <property name="value">
          <double>10.000000000000000</double>
@@ -685,6 +736,9 @@
         <property name="maximum">
          <double>100.000000000000000</double>
         </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
         <property name="value">
          <double>9.000000000000000</double>
         </property>
@@ -720,6 +774,9 @@
         <property name="maximum">
          <double>100.000000000000000</double>
         </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
         <property name="value">
          <double>16.000000000000000</double>
         </property>
@@ -745,7 +802,7 @@
          <double>100.000000000000000</double>
         </property>
         <property name="singleStep">
-         <double>1.000000000000000</double>
+         <double>0.100000000000000</double>
         </property>
         <property name="value">
          <double>-2.000000000000000</double>
@@ -814,6 +871,9 @@
         <property name="maximum">
          <double>100.000000000000000</double>
         </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
         <property name="value">
          <double>2.000000000000000</double>
         </property>
@@ -832,6 +892,9 @@
         </property>
         <property name="maximum">
          <double>100.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
         </property>
         <property name="value">
          <double>2.000000000000000</double>
@@ -853,7 +916,7 @@
          <double>100.000000000000000</double>
         </property>
         <property name="singleStep">
-         <double>1.000000000000000</double>
+         <double>0.100000000000000</double>
         </property>
         <property name="value">
          <double>-2.000000000000000</double>
@@ -890,6 +953,9 @@
         <property name="maximum">
          <double>100.000000000000000</double>
         </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
         <property name="value">
          <double>4.000000000000000</double>
         </property>
@@ -908,6 +974,9 @@
         </property>
         <property name="maximum">
          <double>100.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
         </property>
         <property name="value">
          <double>10.000000000000000</double>
