@@ -9,16 +9,18 @@ OpenGL::OpenGL(QWidget *parent) :
 void OpenGL::initializeGL(){
     glEnable(GL_DEPTH_TEST);
 
-    offr = new OFFReader((char *)"/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/cube.off");
-    GetFaces(offr);
+    offr = new OFFReader((char *) "/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/cube.off");
 
+    /* Initialize Matrix like identity matrix */
     ModelView.setToIdentity();
     MatrixProjection.setToIdentity();
     MatrixRotation.setToIdentity();
 
+    /* Default projection */
     MatrixProjection.ortho(-2, 2, -2, 2, -4, 4);
     MatrixProjection.lookAt(camera.eye,camera.at,camera.up);
 
+    /* Default scale */
     ModelView.scale(0.5);
 
     /* Initialize shaders */
@@ -71,6 +73,7 @@ void OpenGL::InitializeVBOs(){
     delete[] faces;
     faces = NULL;
 
+    /* Creat VBos to colours */
     m_vboColours = new QGLBuffer(QGLBuffer::VertexBuffer);
     m_vboColours->create();
     m_vboColours->bind();
@@ -84,15 +87,18 @@ void OpenGL::paintGL(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.0, 0.0, 0.0, 1.0);
 
-    //bool db = false;
-
+    /* Reset matrix */
     ModelView.setToIdentity();
-    ModelView.scale(0.5);
     MatrixProjection.setToIdentity();
+    MatrixRotation.setToIdentity();
 
+    /* TODO: Put a zoom atribute */
+    ModelView.scale(0.5);
+
+    /* Set lookat */
     ModelView.lookAt(camera.eye, camera.at, camera.up);
 
-    MatrixRotation.setToIdentity();
+    /* Set rotation */
     MatrixRotation.rotate(rotatey,0,1,0);
 
     /* Set projections */

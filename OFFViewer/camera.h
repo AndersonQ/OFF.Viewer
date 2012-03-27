@@ -18,8 +18,8 @@ public:
     QVector3D up;
     QVector3D at;
 
-    int projection, fovy;
-    float right, left, top, bottom, nearplane, farplane, a, b;
+    int projection;
+    double right, left, top, bottom, nearplane, farplane, a, b, fovy;
 };
 
 #endif // CAMERA_H
