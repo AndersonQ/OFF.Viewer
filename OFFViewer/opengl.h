@@ -7,9 +7,11 @@
 #include <QGLBuffer>
 #include <QVector3D>
 #include <QTimer>
+#include <QMouseEvent>
 
 #include "camera.h"
 #include "offreader.h"
+#include "trackball.h"
 
 class OpenGL : public QGLWidget
 {
@@ -42,7 +44,9 @@ protected:
 
     bool wireframe;
 
-    float rotatey;
+    float zoom;
+
+    TrackBall trackball;
 
     /* Functions */
     void initializeGL();
@@ -53,6 +57,13 @@ protected:
     void initializeMode1();
 
     void GetFaces(OFFReader *offr);
+
+    /* Trackball */
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent (QMouseEvent *event);
+    void mouseReleaseEvent (QMouseEvent *event);
+    void wheelEvent (QWheelEvent *event);
+    QPointF toSpherepos(const QPointF& p);
 
 signals:
 

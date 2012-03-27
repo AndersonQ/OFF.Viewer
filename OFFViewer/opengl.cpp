@@ -4,6 +4,8 @@ OpenGL::OpenGL(QWidget *parent) :
     QGLWidget(parent)
 {
     wireframe = false;
+    trackball = TrackBall(0.05f, QVector3D(0, 1, 0), TrackBall::Sphere);
+    zoom = 100;
 }
 
 void OpenGL::initializeGL(){
@@ -21,7 +23,7 @@ void OpenGL::initializeGL(){
     MatrixProjection.lookAt(camera.eye,camera.at,camera.up);//QVector3D(0.0, 0.0, 2), QVector3D(0.0, 0.0, 0.0), QVector3D(0.0, 1.0, 0.0));
 
     /* Default scale */
-    ModelView.scale(0.5);
+    ModelView.scale(zoom/200);
 
     /* Initialize shaders */
     m_vertexShader = new QGLShader(QGLShader::Vertex);
@@ -90,7 +92,6 @@ void OpenGL::paintGL(){
     /* Reset matrix */
     ModelView.setToIdentity();
     MatrixProjection.setToIdentity();
-    MatrixRotation.setToIdentity();
 
     /* Set projections */
     switch(camera.projection)
@@ -106,14 +107,14 @@ void OpenGL::paintGL(){
             break;
     }
 
-    /* TODO: Put a variable zoom */
-    ModelView.scale(0.5);
+    /* Zoom */
+    ModelView.scale(zoom/100);
 
     /* Set lookat */
     ModelView.lookAt(camera.eye, camera.at, camera.up);
 
     /* Set rotation */
-    MatrixRotation.rotate(rotatey,0,1,0);
+    MatrixRotation.rotate(trackball.rotation());
 
     /* Send matrix to shader */
     m_shaderProgram->setUniformValue("MatrixProjection", MatrixProjection);
@@ -171,8 +172,53 @@ void OpenGL::GetFaces(OFFReader *offr){
 }
 
 void OpenGL::Spin(){
-    rotatey = (rotatey<360 ? rotatey+0.02 : 360-rotatey);
     updateGL();
+}
+
+/* Mouse functions */
+
+void OpenGL::mousePressEvent(QMouseEvent *event){
+    if(event->buttons() & Qt::LeftButton)
+    {
+        trackball.push(toSpherepos(event->posF()), QQuaternion());
+        event->accept();
+    }
+}
+
+void OpenGL::mouseMoveEvent (QMouseEvent *event){
+    if(event->buttons() & Qt::LeftButton)
+    {
+        trackball.move(toSpherepos(event->posF()), QQuaternion());
+        updateGL();
+        event->accept();
+    }
+    else
+        trackball.release(toSpherepos(event->posF()), QQuaternion());
+}
+
+void OpenGL::mouseReleaseEvent (QMouseEvent *event){
+    if(event->buttons() & Qt::LeftButton)
+    {
+        trackball.release(toSpherepos(event->posF()), QQuaternion());
+        event->accept();
+    }
+}
+
+void OpenGL::wheelEvent (QWheelEvent *event){
+    if (event->delta() > 0)
+        zoom += 5;
+    else
+        zoom -= 5;
+
+    if (zoom >= 1000)
+        zoom = 1000;
+    if (zoom <= 0)
+        zoom = 1;
+}
+
+QPointF OpenGL::toSpherepos(const QPointF& p)
+{
+    return QPointF(2.0 * float(p.x()) / width() - 1.0, 1.0 - 2.0 * float(p.y()) / height());
 }
 
 /* Slots */
