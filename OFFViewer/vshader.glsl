@@ -17,13 +17,14 @@
 
 attribute vec4 vPosition;
 attribute vec4 vColour;
-uniform mat4 MatrixTransformation;
+uniform mat4 MatrixModelView;
 uniform mat4 MatrixProjection;
+uniform mat4 MatrixRotation;
 
 varying vec4 color;
 
 void main()
 {
-    gl_Position = MatrixProjection * MatrixTransformation * vPosition;
+    gl_Position = MatrixProjection * MatrixModelView * MatrixRotation * vPosition;
     color = vColour;
 }

@@ -34,7 +34,7 @@ protected:
     QVector3D *colours;
     int num_vertices, num_faces, num_edge;
 
-    QMatrix4x4 ModelView, MatrixProjection;
+    QMatrix4x4 ModelView, MatrixProjection, MatrixRotation;
 
     Camera camera;
 

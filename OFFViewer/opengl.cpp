@@ -97,11 +97,13 @@ void OpenGL::paintGL(){
 
     ModelView.setToIdentity();
     ModelView.lookAt(camera.eye, camera.at, camera.up);
-    ModelView.rotate(rotatey,0,1,0);
 
-    m_shaderProgram->setUniformValue("Projection", MatrixProjection);
-    m_shaderProgram->setUniformValue("ModelView", ModelView);
-    //m_shaderProgram->setUniformValue("NormalMatrix", Normal);
+    MatrixRotation.setToIdentity();
+    MatrixRotation.rotate(rotatey,0,1,0);
+
+    m_shaderProgram->setUniformValue("MatrixProjection", MatrixProjection);
+    m_shaderProgram->setUniformValue("MatrixModelView", ModelView);
+    m_shaderProgram->setUniformValue("MatrixRotation", MatrixRotation);
 
     /* VBO of vertex */
     m_vboVertices->bind();
@@ -116,11 +118,9 @@ void OpenGL::paintGL(){
     if(wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     else
-        //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     glDrawArrays(GL_TRIANGLES, 0, offr->num_faces * 3);
-    printf("DrawArrays\n");
-    fflush(stdout);
 
     m_vboVertices->release();
     m_vboColours->release();
