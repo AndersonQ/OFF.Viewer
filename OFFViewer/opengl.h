@@ -60,6 +60,7 @@ protected:
     QTimer *timer;
 
     bool wireframe;
+    bool OneColour;
 
     float zoom;
 
@@ -68,10 +69,9 @@ protected:
     /* Functions */
     void initializeGL();
     void paintGL();
+    void resizeGL(int width, int height);
 
     void InitializeVBOs();
-
-    void initializeMode1();
 
     void GetFaces(OFFReader *offr);
 
@@ -108,7 +108,7 @@ public slots:
     void SetWireframe(bool b);
     void SetCullface(bool c);
     void SetOnecolour(bool b);
-    void SetColourgray(bool b);
+    void SetColourgold(bool b);
 
 };
 

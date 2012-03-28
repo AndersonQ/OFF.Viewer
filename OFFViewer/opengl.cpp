@@ -40,7 +40,7 @@ void OpenGL::initializeGL(){
     MatrixProjection.lookAt(camera.eye,camera.at,camera.up);//QVector3D(0.0, 0.0, 2), QVector3D(0.0, 0.0, 0.0), QVector3D(0.0, 1.0, 0.0));
 
     /* Default scale */
-    ModelView.scale(zoom/200);
+    ModelView.scale(zoom/100);
 
     /* Initialize shaders */
     m_vertexShader = new QGLShader(QGLShader::Vertex);
@@ -110,6 +110,9 @@ void OpenGL::paintGL(){
     ModelView.setToIdentity();
     MatrixProjection.setToIdentity();
 
+    /* POG to not spin (very fast) */
+    //MatrixRotation.setToIdentity();
+
     /* Set projections */
     switch(camera.projection)
     {
@@ -159,7 +162,8 @@ void OpenGL::paintGL(){
     m_vboColours->release();
 }
 
-void OpenGL::initializeMode1(){
+void OpenGL::resizeGL(int width, int height){
+    glViewport(0, 0, (GLsizei) width, (GLsizei) height);
 }
 
 void OpenGL::GetFaces(OFFReader *offr){
@@ -180,10 +184,6 @@ void OpenGL::GetFaces(OFFReader *offr){
         faces[i*3+2].setX( offr->vertices[ offr->faces[i][2] ][0]);
         faces[i*3+2].setY( offr->vertices[ offr->faces[i][2] ][1]);
         faces[i*3+2].setZ( offr->vertices[ offr->faces[i][2] ][2]);
-
-        /*faces[i*3+2] = QVector3D( offr->vertices[ offr->faces[i][2] ] [0],
-                                offr->vertices[ offr->faces[i][2] ] [1],
-                                offr->vertices[ offr->faces[i][2] ] [2] );*/
     }
 
 }
@@ -328,7 +328,41 @@ void OpenGL::SetCullface(bool c)
 }
 
 void OpenGL::SetOnecolour(bool b){
+    QVector3D Colour;
+
+    if(!OneColour){
+        m_vboColours->bind();
+        QVector3D *vColour = (QVector3D*) m_vboColours->map(QGLBuffer::WriteOnly);
+
+        if(b){ /* One colour for each face */
+            for(int i = 0; i < offr->num_faces * 3; i++){
+                Colour = QVector3D(rand()/(float)(RAND_MAX),
+                                   rand()/(float)(RAND_MAX),
+                                   rand()/(float)(RAND_MAX));
+                vColour[i*3] = Colour;
+                vColour[i*3 +1 ] = Colour;
+                vColour[i*3 + 2] = Colour;
+            }
+        }
+        else /* Colour gradient for each face*/
+            for(int i = 0; i < offr->num_faces * 3; i++)
+                vColour[i] = QVector3D(rand()/(float)(RAND_MAX),
+                                    rand()/(float)(RAND_MAX),
+                                    rand()/(float)(RAND_MAX));
+        m_vboColours->unmap();
+    }
 }
 
-void OpenGL::SetColourgray(bool b){
+void OpenGL::SetColourgold(bool b){
+    OneColour = b;
+
+    if(OneColour){
+        m_vboColours->bind();
+        QVector3D *vColour = (QVector3D*) m_vboColours->map(QGLBuffer::WriteOnly);
+
+        for(int i = 0; i < offr->num_faces * 3; i++)
+            vColour[i] = QVector3D(255.0f/255.0f, 215.0f/255.0f, 0.0f/255.0f);
+
+        m_vboColours->unmap();
+    }
 }

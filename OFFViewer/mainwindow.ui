@@ -289,7 +289,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>All faces gray</string>
+        <string>All faces gold</string>
        </property>
       </widget>
       <widget class="QCheckBox" name="checkBox_2">
@@ -1088,7 +1088,7 @@
     <slot>SetWireframe(bool)</slot>
     <slot>SetCullface(bool)</slot>
     <slot>SetOnecolour(bool)</slot>
-    <slot>SetColourgray(bool)</slot>
+    <slot>SetColourgold(bool)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -1290,7 +1290,7 @@
    <sender>checkBox</sender>
    <signal>toggled(bool)</signal>
    <receiver>widget</receiver>
-   <slot>SetColourgray(bool)</slot>
+   <slot>SetColourgold(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>389</x>
