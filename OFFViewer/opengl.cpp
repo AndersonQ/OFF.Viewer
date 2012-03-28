@@ -20,15 +20,16 @@
 OpenGL::OpenGL(QWidget *parent) :
     QGLWidget(parent)
 {
-    wireframe = false;
-    trackball = TrackBall(0.05f, QVector3D(0, 1, 0), TrackBall::Sphere);
-    zoom = 100;
 }
 
 void OpenGL::initializeGL(){
     glEnable(GL_DEPTH_TEST);
 
-    offr = new OFFReader((char *) "/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/cube.off");
+    offr = new OFFReader((char *) "/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/visualizador_off/Modelos_OFF/homer.off");
+    trackball = TrackBall(0.01f, QVector3D(0, 1, 0), TrackBall::Sphere);
+
+    wireframe = false;
+    zoom = 100;
 
     /* Initialize all Matrix like identity matrix */
     ModelView.setToIdentity();
@@ -63,6 +64,9 @@ void OpenGL::initializeGL(){
 
     InitializeVBOs();
     glClearColor(0.0, 1.0, 0.0, 1.0);
+
+    /* Cullface true */
+    glEnable(GL_CULL_FACE);
 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(Spin()));
@@ -109,9 +113,7 @@ void OpenGL::paintGL(){
     /* Reset matrix */
     ModelView.setToIdentity();
     MatrixProjection.setToIdentity();
-
-    /* POG to not spin (very fast) */
-    //MatrixRotation.setToIdentity();
+    MatrixRotation.setToIdentity();
 
     /* Set projections */
     switch(camera.projection)
@@ -123,7 +125,7 @@ void OpenGL::paintGL(){
             MatrixProjection.perspective(camera.fovy, (camera.a/camera.b), camera.nearplane, camera.farplane);
             break;
         case FRUSTUM:
-            MatrixProjection.frustum((qreal)camera.left, (qreal)camera.right, (qreal)camera.bottom, (qreal)camera.top, (qreal)camera.nearplane, (qreal)camera.farplane);
+            MatrixProjection.frustum(camera.left, camera.right, camera.bottom, camera.top, camera.nearplane, camera.farplane);
             break;
     }
 
@@ -206,7 +208,7 @@ void OpenGL::mouseMoveEvent (QMouseEvent *event){
     if(event->buttons() & Qt::LeftButton)
     {
         trackball.move(toSpherepos(event->posF()), QQuaternion());
-        updateGL();
+        //updateGL();
         event->accept();
     }
     else
@@ -329,12 +331,13 @@ void OpenGL::SetCullface(bool c)
 
 void OpenGL::SetOnecolour(bool b){
     QVector3D Colour;
+    OneColour = b;
 
-    if(!OneColour){
+    if(!Colourgold){
         m_vboColours->bind();
         QVector3D *vColour = (QVector3D*) m_vboColours->map(QGLBuffer::WriteOnly);
 
-        if(b){ /* One colour for each face */
+        if(OneColour){ /* One colour for each face */
             for(int i = 0; i < offr->num_faces * 3; i++){
                 Colour = QVector3D(rand()/(float)(RAND_MAX),
                                    rand()/(float)(RAND_MAX),
@@ -354,15 +357,27 @@ void OpenGL::SetOnecolour(bool b){
 }
 
 void OpenGL::SetColourgold(bool b){
-    OneColour = b;
+    Colourgold = b;
 
-    if(OneColour){
+    if(Colourgold){
         m_vboColours->bind();
         QVector3D *vColour = (QVector3D*) m_vboColours->map(QGLBuffer::WriteOnly);
 
         for(int i = 0; i < offr->num_faces * 3; i++)
             vColour[i] = QVector3D(255.0f/255.0f, 215.0f/255.0f, 0.0f/255.0f);
-
         m_vboColours->unmap();
     }
+    else
+        SetOnecolour(OneColour);
+}
+
+void OpenGL::LoadOFF(){
+    QString file = QFileDialog::getOpenFileName(NULL, "Load OFF file", QDir::currentPath() + QString("../"), tr("All Files(*)"));
+    if (file.length() != 0){
+        offr = new OFFReader((char *) file.toStdString().c_str());
+        InitializeVBOs();
+        updateGL();
+    }
+    else
+        QMessageBox::warning(NULL, QString("ERROR!"), QString("").fromUtf8("It is not a file!"), QMessageBox::Ok);
 }

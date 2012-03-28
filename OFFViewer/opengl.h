@@ -61,6 +61,7 @@ protected:
 
     bool wireframe;
     bool OneColour;
+    bool Colourgold;
 
     float zoom;
 
@@ -109,6 +110,7 @@ public slots:
     void SetCullface(bool c);
     void SetOnecolour(bool b);
     void SetColourgold(bool b);
+    void LoadOFF(void);
 
 };
 
