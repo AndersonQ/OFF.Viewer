@@ -25,7 +25,7 @@ OpenGL::OpenGL(QWidget *parent) :
 void OpenGL::initializeGL(){
     glEnable(GL_DEPTH_TEST);
 
-    offr = new OFFReader((char *) "/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/Models.OFF/homer.off");
+    offr = new OFFReader((char *) "/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/Models.OFF/sphere.off");
     trackball = TrackBall(0.01f, QVector3D(0, 1, 0), TrackBall::Sphere);
 
     wireframe = true;
@@ -371,7 +371,7 @@ void OpenGL::SetColourgold(bool b){
 }
 
 void OpenGL::LoadOFF(){
-    QString file = QFileDialog::getOpenFileName(NULL, "Load OFF file", QDir::currentPath() + QString("../"), tr("All Files(*)"));
+    QString file = QFileDialog::getOpenFileName(NULL, "Load OFF file", QDir::currentPath() + QString("../"), tr(" *.off *.OFF;;All Files(*)"));
     if (file.length() != 0){
         offr = new OFFReader((char *) file.toStdString().c_str());
         InitializeVBOs();
