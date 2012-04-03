@@ -208,7 +208,6 @@ void OpenGL::mouseMoveEvent (QMouseEvent *event){
     if(event->buttons() & Qt::LeftButton)
     {
         trackball.move(toSpherepos(event->posF()), QQuaternion());
-        //updateGL();
         event->accept();
     }
     else
