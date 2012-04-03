@@ -25,7 +25,7 @@ OpenGL::OpenGL(QWidget *parent) :
 void OpenGL::initializeGL(){
     glEnable(GL_DEPTH_TEST);
 
-    offr = new OFFReader((char *) "/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/visualizador_off/Modelos_OFF/homer.off");
+    offr = new OFFReader((char *) "/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/Models.OFF/homer.off");
     trackball = TrackBall(0.01f, QVector3D(0, 1, 0), TrackBall::Sphere);
 
     wireframe = true;

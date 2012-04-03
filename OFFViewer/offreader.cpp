@@ -29,6 +29,7 @@ OFFReader::OFFReader(char *name)
         /* Error if can't open file */
         QMessageBox::warning(NULL, QString("ERROR!"), QString("").fromUtf8("Invalid file!"), QMessageBox::Ok);
         printf("ERROR: Can not open file %s\n", name);
+        fflush(stdout);
     }
     else{
         fscanf(off, "%c%c%c",&l1,&l2,&l3);//"%c%c%c",&l1,&l2,&l3);
