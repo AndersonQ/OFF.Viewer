@@ -17,7 +17,7 @@
 
 #include "offreader.h"
 
-#define ALOCATED(ptr) if(!ptr) { printf("Can not allocate memory, Memory is Full!\n"); exit(1); }
+#define ALOCATED(ptr) if(!ptr) { printf("Can not allocate memory, Memory is Full!\n"); exit(1); QMessageBox::warning(NULL, QString("ERROR!"), QString("").fromUtf8("Can not allocate memory, Memory is Full!"), QMessageBox::Ok);}
 
 OFFReader::OFFReader(char *name)
 {
@@ -25,12 +25,16 @@ OFFReader::OFFReader(char *name)
     file_name = name;
     off = fopen(file_name, "r");
 
-    if(off == 0x0)
-        printf("ERROR: Can not open file %s\n", name); //Error if can't open file
+    if(off == 0x0){
+        /* Error if can't open file */
+        QMessageBox::warning(NULL, QString("ERROR!"), QString("").fromUtf8("Invalid file!"), QMessageBox::Ok);
+        printf("ERROR: Can not open file %s\n", name);
+    }
     else{
-        fscanf(off,"%c%c%c",&l1,&l2,&l3);
+        fscanf(off, "%c%c%c",&l1,&l2,&l3);//"%c%c%c",&l1,&l2,&l3);
         if(l1 != 'O' && l2 != 'F' && l3 != 'F'){//strcmp(line1, "OFF") == 0)
             printf("ERROR: File \"%s\" is not a OFF file!", name);
+            QMessageBox::warning(NULL, QString("ERROR!"), QString("").fromUtf8("Invalid file, it is not a OFF file!"), QMessageBox::Ok);
             fclose(off);
             fflush(stdout);
             exit(0);
@@ -58,14 +62,14 @@ OFFReader::~OFFReader(){
 }
 
 void OFFReader::readoff(){
-    int read, n, line = 2;
+    int read, n;//, line = 2;
 
     /* Read number of vertex, face and edge */
     read = fscanf(off, "%d %d %d", &num_vertices, &num_faces, &num_edge);
 
-    /* Degub */
+    /* Degub
     printf("%d num_vertices = %d, num_faces = %d, num_edge = %d, read = %d\n", line ++, num_vertices, num_faces, num_edge, read);
-    fflush(stdout);
+    fflush(stdout); */
 
     /* Alocate the array of vertices */
     vertices = (float **) malloc(sizeof(float*)*num_vertices);
@@ -95,12 +99,13 @@ void OFFReader::readoff(){
     for(int i = 0; i < num_vertices; i++){
         read = fscanf(off, "%f %f %f\n", &(vertices[i][0]), &(vertices[i][1]), &(vertices[i][2]));
 
-        /* Degub */
+        /* Degub
         printf("%d Vertex[%d] = (%f, %f, %f) read = %d\n",line++ , i, vertices[i][0], vertices[i][1], vertices[i][2], read);
-        fflush(stdout);
+        fflush(stdout); */
 
         if (read != 3){
             printf("ERROR: Reading file \"%s\", format is invalid!\n", file_name);
+            QMessageBox::warning(NULL, QString("ERROR!"), QString("").fromUtf8("Invalid file, it is not a OFF file!"), QMessageBox::Ok);
             fflush(stdout);
             exit(1);
         }
@@ -110,16 +115,18 @@ void OFFReader::readoff(){
     for(int i = 0; i < num_faces; i++){
         read = fscanf(off, "%d %d %d %d", &n, &(faces[i][0]), &(faces[i][1]), &(faces[i][2]));
 
-        /* Degub */
+        /* Degub
         printf("%d Face[%d] = (%d, %d, %d, %d) read = %d\n",line++, i, n, faces[i][0], faces[i][1], faces[i][2], read);
-        fflush(stdout);
+        fflush(stdout); */
 
         if (read != 4){
+            QMessageBox::warning(NULL, QString("ERROR!"), QString("").fromUtf8("Invalid file, it is not a OFF file!"), QMessageBox::Ok);
             printf("ERROR: Reading file \"%s\", format is invalid! Read %d, but expected 4\n", file_name, read);
             fflush(stdout);
             exit(1);
         }
         if (n != 3){
+            QMessageBox::warning(NULL, QString("ERROR!"), QString("").fromUtf8("Invalid file, Only triangles are acepted!"), QMessageBox::Ok);
             printf("ERROR: Reading file \"%s\", format is invalid! Only triangles are acepted!\n", file_name);
             fflush(stdout);
             exit(1);

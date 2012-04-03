@@ -90,10 +90,10 @@ public slots:
     void SetProjection(int p);
     void SetLeft(double n);
     void SetRight(double n);
-    void Setbottom(double n);
+    void SetBottom(double n);
     void SetTop(double n);
     void SetNearplane(double n);
-    void SetFarplane(double n);
+    void SetFarpalne(double n);
     void Seta(double n);
     void Setb(double n);
     void SetAnglefovy(double n);

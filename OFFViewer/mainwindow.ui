@@ -70,7 +70,7 @@
         <double>0.100000000000000</double>
        </property>
        <property name="value">
-        <double>5.000000000000000</double>
+        <double>2.000000000000000</double>
        </property>
       </widget>
       <widget class="QLabel" name="label_19">
@@ -106,6 +106,9 @@
        </property>
        <property name="singleStep">
         <double>0.100000000000000</double>
+       </property>
+       <property name="value">
+        <double>1.000000000000000</double>
        </property>
       </widget>
       <widget class="QDoubleSpinBox" name="doubleSpinBox_23">
@@ -291,6 +294,9 @@
        <property name="text">
         <string>All faces gold</string>
        </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
       </widget>
       <widget class="QCheckBox" name="checkBox_2">
        <property name="geometry">
@@ -318,7 +324,7 @@
         <string>Wireframe</string>
        </property>
        <property name="checked">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
       </widget>
       <widget class="QCheckBox" name="checkBox_4">
@@ -334,7 +340,7 @@
         <string>Cull Face</string>
        </property>
        <property name="checked">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
       </widget>
      </widget>

@@ -28,7 +28,7 @@ void OpenGL::initializeGL(){
     offr = new OFFReader((char *) "/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/visualizador_off/Modelos_OFF/homer.off");
     trackball = TrackBall(0.01f, QVector3D(0, 1, 0), TrackBall::Sphere);
 
-    wireframe = false;
+    wireframe = true;
     zoom = 100;
 
     /* Initialize all Matrix like identity matrix */
@@ -82,10 +82,10 @@ void OpenGL::InitializeVBOs(){
 
     /* Initialize vertex's colours */
     for(int i = 0; i < offr->num_faces*3; i++)
-        //colours[i] = QVector3D(0.8, 0.8, 0.8);
-        colours[i] = QVector3D(rand()/(float)(RAND_MAX),
+        colours[i] = QVector3D(255.0f/255.0f, 215.0f/255.0f, 0.0f/255.0f);
+        /*colours[i] = QVector3D(rand()/(float)(RAND_MAX),
                                rand()/(float)(RAND_MAX),
-                               rand()/(float)(RAND_MAX));
+                               rand()/(float)(RAND_MAX));*/
 
     /* Creat VBO to vertices */
     m_vboVertices = new QGLBuffer(QGLBuffer::VertexBuffer);
@@ -252,7 +252,7 @@ void OpenGL::SetRight(double n){
     camera.right = n;
 }
 
-void OpenGL::Setbottom(double n){
+void OpenGL::SetBottom(double n){
     camera.bottom = n;
 }
 
@@ -264,7 +264,7 @@ void OpenGL::SetNearplane(double n){
     camera.nearplane = n;
 }
 
-void OpenGL::SetFarplane(double n){
+void OpenGL::SetFarpalne(double n){
     camera.farplane = n;
 }
 
@@ -377,6 +377,6 @@ void OpenGL::LoadOFF(){
         InitializeVBOs();
         updateGL();
     }
-    else
-        QMessageBox::warning(NULL, QString("ERROR!"), QString("").fromUtf8("It is not a file!"), QMessageBox::Ok);
+    /*else
+        QMessageBox::warning(NULL, QString("ERROR!"), QString("").fromUtf8("It is not a file!"), QMessageBox::Ok);*/
 }

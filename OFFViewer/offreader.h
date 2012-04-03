@@ -24,6 +24,7 @@
 #include <locale.h> /* To use setlocale */
 
 #include <QVector3D>
+#include <QMessageBox>
 
 class OFFReader
 {
