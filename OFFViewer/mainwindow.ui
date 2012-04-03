@@ -61,7 +61,7 @@
         </rect>
        </property>
        <property name="minimum">
-        <double>-100.000000000000000</double>
+        <double>0.000000000000000</double>
        </property>
        <property name="maximum">
         <double>100.000000000000000</double>
@@ -99,7 +99,7 @@
         </rect>
        </property>
        <property name="minimum">
-        <double>-100.000000000000000</double>
+        <double>0.000000000000000</double>
        </property>
        <property name="maximum">
         <double>100.000000000000000</double>
@@ -121,7 +121,7 @@
         </rect>
        </property>
        <property name="minimum">
-        <double>-100.000000000000000</double>
+        <double>0.000000000000000</double>
        </property>
        <property name="maximum">
         <double>100.000000000000000</double>
@@ -140,7 +140,7 @@
         </rect>
        </property>
        <property name="minimum">
-        <double>-100.000000000000000</double>
+        <double>0.000000000000000</double>
        </property>
        <property name="maximum">
         <double>100.000000000000000</double>
@@ -159,7 +159,7 @@
         </rect>
        </property>
        <property name="minimum">
-        <double>-100.000000000000000</double>
+        <double>0.000000000000000</double>
        </property>
        <property name="maximum">
         <double>100.000000000000000</double>
@@ -178,7 +178,7 @@
         </rect>
        </property>
        <property name="minimum">
-        <double>-100.000000000000000</double>
+        <double>0.000000000000000</double>
        </property>
        <property name="maximum">
         <double>100.000000000000000</double>
@@ -197,7 +197,7 @@
         </rect>
        </property>
        <property name="minimum">
-        <double>-100.000000000000000</double>
+        <double>0.000000000000000</double>
        </property>
        <property name="maximum">
         <double>100.000000000000000</double>
@@ -216,7 +216,7 @@
         </rect>
        </property>
        <property name="minimum">
-        <double>-100.000000000000000</double>
+        <double>0.000000000000000</double>
        </property>
        <property name="maximum">
         <double>100.000000000000000</double>
@@ -235,7 +235,7 @@
         </rect>
        </property>
        <property name="minimum">
-        <double>-100.000000000000000</double>
+        <double>0.000000000000000</double>
        </property>
        <property name="maximum">
         <double>100.000000000000000</double>
@@ -360,7 +360,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
