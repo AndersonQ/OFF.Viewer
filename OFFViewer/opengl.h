@@ -74,6 +74,7 @@ protected:
 
     float zoom;
 
+    int Shader;
     GLint BgRed, BgGreen, BgBlue;
 
     TrackBall trackball;
@@ -132,6 +133,7 @@ public slots:
     void SetBgRed(int r);
     void SetBgGreen(int g);
     void SetBgBlue(int b);
+    void SetShader(int s);
 
 };
 

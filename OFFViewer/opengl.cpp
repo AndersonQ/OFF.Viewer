@@ -35,6 +35,9 @@ OpenGL::OpenGL(QWidget *parent) :
     /* Backgound initial colour */
     BgRed = BgGreen = BgBlue = 0;
 
+    /* Set default shading */
+    Shader = 0;
+
     trackball = TrackBall(0.01f, QVector3D(0, 1, 0), TrackBall::Sphere);
 
     /* Load OFF file *
@@ -317,7 +320,15 @@ void OpenGL::paintGL(){
     //m_shaderProgram->setUniformValue("MatrixRotation", MatrixRotation);
     m_shaderProgram->setUniformValue("NormalMatrix", MatrixNormal);
 
-    UseFlatShading();
+    switch(Shader){
+        case 0:
+            UseFlatShading();
+            break;
+        defaut:
+            UseFlatShading();
+            break;
+    }
+
 
     /*
     /* VBO of vertex *
@@ -591,4 +602,8 @@ void OpenGL::SetBgGreen(int g){
 
 void OpenGL::SetBgBlue(int b){
     BgBlue = b;
+}
+
+void OpenGL::SetShader(int s){
+    Shader = s;
 }
