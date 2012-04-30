@@ -36,4 +36,6 @@ OTHER_FILES += \
     fshader.glsl \
     vshader.glsl \
     fshader.Flat.glsl \
-    vshader.Flat.glsl
+    vshader.Flat.glsl \
+    fshader.Gouraud.glsl \
+    vshader.Gouraud.glsl
