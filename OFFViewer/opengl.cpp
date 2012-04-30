@@ -315,9 +315,8 @@ void OpenGL::paintGL(){
 
     /* Send matrix to shader */
     m_shaderProgram->setUniformValue("MatrixProjection", MatrixProjection);
-    m_shaderProgram->setUniformValue("MatrixTransformation", ModelView);
-    //m_shaderProgram->setUniformValue("MatrixModelView", ModelView);
-    //m_shaderProgram->setUniformValue("MatrixRotation", MatrixRotation);
+    m_shaderProgram->setUniformValue("MatrixModelView", ModelView);
+    m_shaderProgram->setUniformValue("MatrixRotation", MatrixRotation);
     m_shaderProgram->setUniformValue("NormalMatrix", MatrixNormal);
 
     switch(Shader){
@@ -358,8 +357,8 @@ void OpenGL::UseFlatShading(){
     glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
     m_vboVertices->bind();
-    m_shaderProgram->enableAttributeArray("Pos_Vertice");
-    m_shaderProgram->setAttributeBuffer("Pos_Vertice",GL_FLOAT,0,4,0);
+    m_shaderProgram->enableAttributeArray("vPosition");
+    m_shaderProgram->setAttributeBuffer("vPosition",GL_FLOAT,0,4,0);
 
     m_vboNormal->bind();
     m_shaderProgram->enableAttributeArray("vNormal");
