@@ -15,16 +15,31 @@
  * along with OFFViewer.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-attribute vec4 vPosition;
-attribute vec4 vColour;
-uniform mat4 MatrixModelView;
+attribute vec4 Pos_Vertice;
+uniform mat4 MatrixTransformation;
 uniform mat4 MatrixProjection;
-uniform mat4 MatrixRotation;
 
 varying vec4 color;
 
 void main()
 {
-    gl_Position = MatrixProjection * MatrixModelView * MatrixRotation * vPosition;
-    color = vColour;
+    gl_Position = MatrixProjection * MatrixTransformation * Pos_Vertice;
+    //gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+    color = vec4(0.5, 0.5, 0.5, 1.0);
+    //color = Cor_Vertice;
 }
+
+/*
+attribute vec4 Pos_Vertice; //attribute vec4 vPosition;
+attribute vec4 vColour;
+uniform mat4 MatrixModelView;
+uniform mat4 MatrixProjection;
+//uniform mat4 MatrixRotation;
+
+varying vec4 color;
+
+void main()
+{
+    gl_Position = MatrixProjection * MatrixModelView * Pos_Vertice; //MatrixRotation
+    color = vColour;
+}*/

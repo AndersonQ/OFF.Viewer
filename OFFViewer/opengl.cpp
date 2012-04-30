@@ -20,13 +20,29 @@
 OpenGL::OpenGL(QWidget *parent) :
     QGLWidget(parent)
 {
+    /* Set NULL all pointers */
+    m_vertexShader = NULL;
+    m_fragmentShader = NULL;
+    m_shaderProgram = NULL;
+    m_vboVertices = NULL;
+    m_vboNormal = NULL;
+    m_vboColours = NULL;
+    m_vboIndices = NULL;
+    vertices = NULL;
+    indices = NULL;
+    normal = NULL;
+
+    trackball = TrackBall(0.01f, QVector3D(0, 1, 0), TrackBall::Sphere);
+
+    /* Load OFF file */
+    QString file = QFileDialog::getOpenFileName(NULL, "Load OFF file", QDir::currentPath() + QString("../"), tr(" *.off *.OFF;;All Files(*)"));
+    if (file.length() != 0){
+        offr = new OFFReader((char *) file.toStdString().c_str());
+    }
 }
 
 void OpenGL::initializeGL(){
     glEnable(GL_DEPTH_TEST);
-
-    offr = new OFFReader((char *) "/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/Models.OFF/sphere.off");
-    trackball = TrackBall(0.01f, QVector3D(0, 1, 0), TrackBall::Sphere);
 
     wireframe = true;
     zoom = 100;
@@ -35,15 +51,16 @@ void OpenGL::initializeGL(){
     ModelView.setToIdentity();
     MatrixProjection.setToIdentity();
     MatrixRotation.setToIdentity();
+    MatrixNormal.setToIdentity();
 
     /* Default projection */
     MatrixProjection.ortho(-2, 2, -2, 2, -4, 4);
     MatrixProjection.lookAt(camera.eye,camera.at,camera.up);//QVector3D(0.0, 0.0, 2), QVector3D(0.0, 0.0, 0.0), QVector3D(0.0, 1.0, 0.0));
 
     /* Default scale */
-    ModelView.scale(zoom/100);
+    //ModelView.scale(zoom/100);
 
-    /* Initialize shaders */
+    /* Initialize shaders *
     m_vertexShader = new QGLShader(QGLShader::Vertex);
     m_fragmentShader = new QGLShader(QGLShader::Fragment);
 
@@ -60,17 +77,152 @@ void OpenGL::initializeGL(){
     if(!m_shaderProgram->link())
         qWarning() << m_shaderProgram->log() << endl;
     else
-        m_shaderProgram->bind();
+        m_shaderProgram->bind();*/
 
-    InitializeVBOs();
+    //InitializeVBOs();
+    init_FlatShading();
     glClearColor(0.0, 1.0, 0.0, 1.0);
 
     /* Cullface true */
-    glEnable(GL_CULL_FACE);
+    //glEnable(GL_CULL_FACE);
 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(Spin()));
     timer->start(1);
+}
+
+void OpenGL::CreateVertexIndices()
+{
+    /* Create Vector4D to vertices */
+    if (vertices){
+        delete[] vertices;
+        vertices = NULL;
+    }
+    vertices = new QVector4D[offr->num_vertices];
+    for(int i = 0; i < offr->num_vertices; i++){
+        vertices[i].setX(offr->vertices[i][0]);
+        vertices[i].setY(offr->vertices[i][1]);
+        vertices[i].setZ(offr->vertices[i][2]);
+        vertices[i].setW(1.0);
+    }
+
+    /* Create vector to indices */
+    if(indices){
+        delete[] indices;
+        indices = NULL;
+    }
+    indices = new unsigned int[offr->num_faces * 3];
+    for(int i = 0; i < offr->num_faces; i++){
+        indices[i*3   ] = offr->faces[i][0];
+        indices[i*3 +1] = offr->faces[i][1];
+        indices[i*3 +2] = offr->faces[i][2];
+    }
+}
+
+void OpenGL::init_FlatShading(){
+
+    QVector4D *FlatVertices;
+    QVector3D *FlatNormal;
+
+    CreateVertexIndices();
+    LoadShaders(":/vshader.Flat.glsl",":/fshader.Flat.glsl");
+    CalculateNormal();
+
+    FlatVertices = new QVector4D[offr->num_faces * 3];
+    FlatNormal  = new QVector3D[offr->num_faces * 3];
+
+    for(int i = 0; i < offr->num_faces; i++)
+    {
+        FlatVertices[i*3    ] = vertices[indices[i*3]];
+        FlatVertices[i*3 + 1] = vertices[indices[i*3 +1]];
+        FlatVertices[i*3 + 2] = vertices[indices[i*3 +1]];
+
+        FlatNormal[i*3    ] = normal[i];
+        FlatNormal[i*3 + 1] = normal[i];
+        FlatNormal[i*3 + 2] = normal[i];
+
+    }
+
+    /* Create VBO to vertices */
+    if (m_vboVertices) delete m_vboVertices;
+    m_vboVertices = new QGLBuffer(QGLBuffer::VertexBuffer);
+    m_vboVertices->create();
+    m_vboVertices->bind();
+    m_vboVertices->setUsagePattern(QGLBuffer::StaticDraw);
+    m_vboVertices->allocate(FlatVertices, offr->num_faces*3*sizeof(QVector4D));
+    delete []FlatVertices;
+    FlatVertices = NULL;
+
+    /* Create VBO to indices */
+    if(m_vboNormal) delete m_vboNormal;
+
+    m_vboNormal = new QGLBuffer(QGLBuffer::VertexBuffer);
+    m_vboNormal->create();
+    m_vboNormal->bind();
+    m_vboNormal->setUsagePattern(QGLBuffer::StaticDraw);
+    m_vboNormal->allocate(FlatNormal, offr->num_faces*3*sizeof(QVector3D));
+    delete []FlatNormal;
+    FlatNormal = NULL;
+    delete []normal;
+    normal = NULL;
+
+    QVector4D ambient_product  = light.ambient * material.ambient;
+    QVector4D diffuse_product  = light.diffuse * material.diffuse;
+    QVector4D specular_product = light.specular * material.specular;
+
+    m_shaderProgram->setUniformValue("AmbientProduct",ambient_product);
+    m_shaderProgram->setUniformValue("DiffuseProduct",diffuse_product);
+    m_shaderProgram->setUniformValue("SpecularProduct",specular_product);
+    m_shaderProgram->setUniformValue("LightPosition",light.position);
+    m_shaderProgram->setUniformValue("Shininess",material.shininess);
+}
+
+void OpenGL::LoadShaders(std::string const &s1, std::string const &s2){
+    m_shaderProgram->release();
+
+    if (m_vertexShader)   delete m_vertexShader;
+    if (m_fragmentShader) delete m_fragmentShader;
+
+    m_vertexShader = new QGLShader(QGLShader::Vertex);
+
+    m_fragmentShader = new QGLShader(QGLShader::Fragment);
+
+    if(!m_vertexShader->compileSourceFile(s1.c_str()))
+        qWarning() << m_vertexShader->log();
+
+    if(!m_fragmentShader->compileSourceFile(s2.c_str()))
+        qWarning() << m_fragmentShader->log();
+
+    if(m_shaderProgram) delete m_shaderProgram;
+
+    m_shaderProgram = new QGLShaderProgram;
+    m_shaderProgram->addShader(m_vertexShader);
+    m_shaderProgram->addShader(m_fragmentShader);
+
+    if(!m_shaderProgram->link())
+        qWarning() << m_shaderProgram->log() << endl;
+    else
+        m_shaderProgram->bind();
+}
+
+void OpenGL::CalculateNormal(){
+
+    if (normal) delete[] normal;
+
+    normal = new QVector3D[offr->num_faces];
+
+    for(int i = 0; i < offr->num_faces; i++){
+        int i0, i1, i2;
+
+        i0 = indices[i*3];
+        i1 = indices[i*3 + 1];
+        i2 = indices[i*3 + 2];
+
+        QVector3D v1 = (vertices[i1] - vertices[i0]).toVector3D();
+        QVector3D v2 = (vertices[i2] - vertices[i0]).toVector3D();
+
+        normal[i] = QVector3D::crossProduct(v1, v2).normalized();
+    }
 }
 
 void OpenGL::InitializeVBOs(){
@@ -114,6 +266,16 @@ void OpenGL::paintGL(){
     ModelView.setToIdentity();
     MatrixProjection.setToIdentity();
     MatrixRotation.setToIdentity();
+    MatrixNormal.setToIdentity();
+
+    /* Set lookat */
+    ModelView.lookAt(camera.eye, camera.at, camera.up);
+    /* Zoom */
+    ModelView.scale(zoom/100);
+    /* Set rotation */
+    ModelView.rotate(trackball.rotation()); //MatrixRotation.rotate(trackball.rotation());
+    /* Set NormalMatrix*/
+    MatrixNormal = ModelView.normalMatrix();
 
     /* Set projections */
     switch(camera.projection)
@@ -129,27 +291,23 @@ void OpenGL::paintGL(){
             break;
     }
 
-    /* Zoom */
-    ModelView.scale(zoom/100);
-
-    /* Set lookat */
-    ModelView.lookAt(camera.eye, camera.at, camera.up);
-
-    /* Set rotation */
-    MatrixRotation.rotate(trackball.rotation());
-
     /* Send matrix to shader */
     m_shaderProgram->setUniformValue("MatrixProjection", MatrixProjection);
     m_shaderProgram->setUniformValue("MatrixModelView", ModelView);
-    m_shaderProgram->setUniformValue("MatrixRotation", MatrixRotation);
+    //m_shaderProgram->setUniformValue("MatrixRotation", MatrixRotation);
+    m_shaderProgram->setUniformValue("NormalMatrix", MatrixNormal);
 
-    /* VBO of vertex */
+    UseFlatShading();
+
+    /*
+    /* VBO of vertex *
     m_vboVertices->bind();
     m_shaderProgram->enableAttributeArray("vPosition");
     m_shaderProgram->setAttributeBuffer("vPosition", GL_FLOAT, 0, 3, 0);
 
-    /* VBO of colours */
-    m_vboColours->bind();
+    /* VBO of colours *
+    //m_vboColours->bind();
+    m_vboIndices->bind();
     m_shaderProgram->enableAttributeArray("vColour");
     m_shaderProgram->setAttributeBuffer("vColour", GL_FLOAT, 0, 3, 0);
 
@@ -162,6 +320,24 @@ void OpenGL::paintGL(){
 
     m_vboVertices->release();
     m_vboColours->release();
+    */
+}
+
+void OpenGL::UseFlatShading(){
+    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+
+    m_vboVertices->bind();
+    m_shaderProgram->enableAttributeArray("Pos_Vertice");
+    m_shaderProgram->setAttributeBuffer("Pos_Vertice",GL_FLOAT,0,4,0);
+
+    m_vboNormal->bind();
+    m_shaderProgram->enableAttributeArray("vNormal");
+    m_shaderProgram->setAttributeBuffer("vNormal",GL_FLOAT,0,3,0);
+
+    glDrawArrays( GL_TRIANGLES, 0, offr->num_faces*3 );
+
+    this->m_vboNormal->release();
+    this->m_vboVertices->release();
 }
 
 void OpenGL::resizeGL(int width, int height){

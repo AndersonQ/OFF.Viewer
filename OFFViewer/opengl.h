@@ -29,6 +29,8 @@
 #include "camera.h"
 #include "offreader.h"
 #include "trackball.h"
+#include "light.h"
+#include "material.h"
 
 class OpenGL : public QGLWidget
 {
@@ -45,17 +47,24 @@ protected:
     QGLShaderProgram *m_shaderProgram;
 
     QGLBuffer *m_vboVertices;
-    QGLBuffer *m_vboNormals;
+    QGLBuffer *m_vboNormal;
     QGLBuffer *m_vboColours;
     QGLBuffer *m_vboIndices;
 
     QVector3D *faces;
     QVector3D *colours;
+
+    QVector3D *normal;
+    QVector4D *vertices;
+    unsigned int *indices;
     int num_vertices, num_faces, num_edge;
 
     QMatrix4x4 ModelView, MatrixProjection, MatrixRotation;
+    QMatrix3x3 MatrixNormal;
 
     Camera camera;
+    Light light;
+    Material material;
 
     QTimer *timer;
 
@@ -71,6 +80,13 @@ protected:
     void initializeGL();
     void paintGL();
     void resizeGL(int width, int height);
+
+    void init_FlatShading();
+    void UseFlatShading();
+    void CreateVertexIndices();
+
+    void LoadShaders(std::string const &s1, std::string const &s2);
+    void CalculateNormal();
 
     void InitializeVBOs();
 

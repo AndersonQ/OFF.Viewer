@@ -15,13 +15,17 @@ SOURCES += main.cpp\
     offreader.cpp \
     camera.cpp \
     opengl.cpp \
-    trackball.cpp
+    trackball.cpp \
+    light.cpp \
+    material.cpp
 
 HEADERS  += mainwindow.h \
     offreader.h \
     camera.h \
     opengl.h \
-    trackball.h
+    trackball.h \
+    light.h \
+    material.h
 
 FORMS    += mainwindow.ui
 
@@ -30,4 +34,6 @@ RESOURCES += \
 
 OTHER_FILES += \
     fshader.glsl \
-    vshader.glsl
+    vshader.glsl \
+    fshader.Flat.glsl \
+    vshader.Flat.glsl
