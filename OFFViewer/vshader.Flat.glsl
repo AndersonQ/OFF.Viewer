@@ -1,10 +1,11 @@
-attribute vec4 Pos_Vertice;
+attribute vec4 vPosition;
 attribute vec3 vNormal;
 varying vec4 color;
 
 uniform vec4 AmbientProduct, DiffuseProduct, SpecularProduct;
-uniform mat4 MatrixTransformation;
+uniform mat4 MatrixModelView;
 uniform mat4 MatrixProjection;
+//uniform mat4 MatrixRotation;
 uniform mat3 NormalMatrix;
 uniform vec4 LightPosition;
 uniform float Shininess;
@@ -12,9 +13,9 @@ uniform float Shininess;
 void main()
 {
     // Transform vertex  position into eye coordinates
-    vec3 pos = (MatrixTransformation * Pos_Vertice).xyz;
+    vec3 pos = (MatrixModelView * vPosition).xyz;
 
-    //vec3 L = normalize( (MatrixTransformation*LightPosition).xyz - pos );
+    //vec3 L = normalize( (MatrixModelView*LightPosition).xyz - pos );
     vec3 L = normalize(LightPosition.xyz - pos);
 
     vec3 E = normalize( -pos );
@@ -37,7 +38,7 @@ void main()
         specular = vec4(0.0, 0.0, 0.0, 1.0);
     }
 
-    gl_Position = MatrixProjection * MatrixTransformation * Pos_Vertice;
+    gl_Position = MatrixProjection * MatrixModelView * vPosition;
 
     color = ambient + diffuse + specular;
     color.a = 1.0;
