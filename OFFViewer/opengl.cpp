@@ -34,11 +34,11 @@ OpenGL::OpenGL(QWidget *parent) :
 
     trackball = TrackBall(0.01f, QVector3D(0, 1, 0), TrackBall::Sphere);
 
-    /* Load OFF file */
+    /* Load OFF file *
     QString file = QFileDialog::getOpenFileName(NULL, "Load OFF file", QDir::currentPath() + QString("../"), tr(" *.off *.OFF;;All Files(*)"));
     if (file.length() != 0){
         offr = new OFFReader((char *) file.toStdString().c_str());
-    }
+    }*/
 }
 
 void OpenGL::initializeGL(){
@@ -46,6 +46,8 @@ void OpenGL::initializeGL(){
 
     wireframe = true;
     zoom = 100;
+
+    offr = new OFFReader((char *) "/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/Models.OFF/sphere.off");
 
     /* Initialize all Matrix like identity matrix */
     ModelView.setToIdentity();
@@ -79,12 +81,15 @@ void OpenGL::initializeGL(){
     else
         m_shaderProgram->bind();*/
 
+    //DEBUG
+    glPointSize(10.0);
+
     //InitializeVBOs();
     init_FlatShading();
     glClearColor(0.0, 1.0, 0.0, 1.0);
 
     /* Cullface true */
-    //glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(Spin()));
@@ -105,6 +110,11 @@ void OpenGL::CreateVertexIndices()
         vertices[i].setZ(offr->vertices[i][2]);
         vertices[i].setW(1.0);
     }
+    /*DEBUG
+    vertices[0] = QVector4D(-1.0, -1.0, 0.0, 1.0);
+    vertices[1] = QVector4D(1.0, 1.0, 0.0, 1.0);
+    vertices[2] = QVector4D(0.5, 0.5, 0.0, 1.0);
+    vertices[3] = QVector4D(-1.0, -1.0, 1.0, 1.0);*/
 
     /* Create vector to indices */
     if(indices){
@@ -117,6 +127,12 @@ void OpenGL::CreateVertexIndices()
         indices[i*3 +1] = offr->faces[i][1];
         indices[i*3 +2] = offr->faces[i][2];
     }
+    /*DEBUG
+    indices[0] = 0;
+    indices[1] = 1;
+    indices[2] = 2;
+    indices[3] = 3;*/
+
 }
 
 void OpenGL::init_FlatShading(){
@@ -260,7 +276,7 @@ void OpenGL::InitializeVBOs(){
 
 void OpenGL::paintGL(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClearColor(1.0, 1.0, 1.0, 1.0);
 
     /* Reset matrix */
     ModelView.setToIdentity();
@@ -293,7 +309,8 @@ void OpenGL::paintGL(){
 
     /* Send matrix to shader */
     m_shaderProgram->setUniformValue("MatrixProjection", MatrixProjection);
-    m_shaderProgram->setUniformValue("MatrixModelView", ModelView);
+    m_shaderProgram->setUniformValue("MatrixTransformation", ModelView);
+    //m_shaderProgram->setUniformValue("MatrixModelView", ModelView);
     //m_shaderProgram->setUniformValue("MatrixRotation", MatrixRotation);
     m_shaderProgram->setUniformValue("NormalMatrix", MatrixNormal);
 
@@ -334,7 +351,11 @@ void OpenGL::UseFlatShading(){
     m_shaderProgram->enableAttributeArray("vNormal");
     m_shaderProgram->setAttributeBuffer("vNormal",GL_FLOAT,0,3,0);
 
-    glDrawArrays( GL_TRIANGLES, 0, offr->num_faces*3 );
+    //glDrawArrays( GL_TRIANGLES, 0, offr->num_faces*3 );
+
+    //DEBUG
+    //glDrawElements( GL_LINES, 4, GL_UNSIGNED_INT, indices);
+    glDrawArrays( GL_TRIANGLE_STRIP , 0, offr->num_faces*3 );
 
     this->m_vboNormal->release();
     this->m_vboVertices->release();
