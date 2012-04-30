@@ -32,6 +32,9 @@ OpenGL::OpenGL(QWidget *parent) :
     indices = NULL;
     normal = NULL;
 
+    /* Backgound initial colour */
+    BgRed = BgGreen = BgBlue = 0;
+
     trackball = TrackBall(0.01f, QVector3D(0, 1, 0), TrackBall::Sphere);
 
     /* Load OFF file *
@@ -276,7 +279,7 @@ void OpenGL::InitializeVBOs(){
 
 void OpenGL::paintGL(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(1.0, 1.0, 1.0, 1.0);
+    glClearColor(BgRed/255.0, BgGreen/255.0, BgBlue/255.0, 1.0);
 
     /* Reset matrix */
     ModelView.setToIdentity();
@@ -576,4 +579,16 @@ void OpenGL::LoadOFF(){
     }
     /*else
         QMessageBox::warning(NULL, QString("ERROR!"), QString("").fromUtf8("It is not a file!"), QMessageBox::Ok);*/
+}
+
+void OpenGL::SetBgRed(int r){
+    BgRed = r;
+}
+
+void OpenGL::SetBgGreen(int g){
+    BgGreen = g;
+}
+
+void OpenGL::SetBgBlue(int b){
+    BgBlue = b;
 }

@@ -74,6 +74,8 @@ protected:
 
     float zoom;
 
+    GLint BgRed, BgGreen, BgBlue;
+
     TrackBall trackball;
 
     /* Functions */
@@ -127,6 +129,9 @@ public slots:
     void SetOnecolour(bool b);
     void SetColourgold(bool b);
     void LoadOFF(void);
+    void SetBgRed(int r);
+    void SetBgGreen(int g);
+    void SetBgBlue(int b);
 
 };
 
