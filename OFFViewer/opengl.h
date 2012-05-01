@@ -68,13 +68,15 @@ protected:
 
     QTimer *timer;
 
+    QImage *TexImage, *TexNormal;
+
     bool wireframe;
     bool OneColour;
     bool Colourgold;
 
     float zoom;
 
-    int Shader;
+    int Shader, TexIndice;
     GLint BgRed, BgGreen, BgBlue;
 
     TrackBall trackball;
@@ -89,14 +91,17 @@ protected:
     void initPhong();
     void initPhongHalf();
     void initCartoon();
+    void initSimpleTexMapping();
 
     void UseFlatShading();
     void UseGouraud();
     void UsePhong();
     void UsePhongHalf();
     void UseCartoon();
+    void UseSimpleTexMapping();
 
     void CreateVertexIndices();
+    void ChooseTexture();
 
     void ChangeShader(int s);
 

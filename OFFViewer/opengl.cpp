@@ -32,6 +32,8 @@ OpenGL::OpenGL(QWidget *parent) :
     indices = NULL;
     normal = NULL;
 
+    TexImage = TexNormal = NULL;
+
     /* Backgound initial colour */
     BgRed = BgGreen = BgBlue = 0;
 
@@ -200,7 +202,7 @@ void OpenGL::initFlatShading(){
 }
 
 void OpenGL::UseFlatShading(){
-    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    //glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
     m_vboVertices->bind();
     m_shaderProgram->enableAttributeArray("vPosition");
@@ -268,7 +270,7 @@ void OpenGL::initGouraudShading(){
 }
 
 void OpenGL::UseGouraud(){
-    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    //glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
     m_vboVertices->bind();
     m_shaderProgram->enableAttributeArray("vPosition");
@@ -341,7 +343,7 @@ void OpenGL::initPhong(){
 }
 
 void OpenGL::UsePhong(){
-    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    //glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
     m_vboVertices->bind();
     m_shaderProgram->enableAttributeArray("vPosition");
@@ -415,7 +417,7 @@ void OpenGL::initPhongHalf(){
 }
 
 void OpenGL::UsePhongHalf(){
-    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    //glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
     m_vboVertices->bind();
     m_shaderProgram->enableAttributeArray("vPosition");
@@ -493,7 +495,7 @@ void OpenGL::initCartoon(){
 }
 
 void OpenGL::UseCartoon(){
-    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    //glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
     m_vboVertices->bind();
     m_shaderProgram->enableAttributeArray("vPosition");
@@ -513,6 +515,15 @@ void OpenGL::UseCartoon(){
 
     m_vboVertices->release();
     m_vboIndices->release();
+}
+
+
+void OpenGL::initSimpleTexMapping(){
+
+}
+
+void OpenGL::ChooseTexture(){
+
 }
 
 void OpenGL::LoadShaders(std::string const &s1, std::string const &s2){
@@ -635,6 +646,11 @@ void OpenGL::paintGL(){
     //m_shaderProgram->setUniformValue("MatrixRotation", MatrixRotation);
     m_shaderProgram->setUniformValue("NormalMatrix", MatrixNormal);
 
+    if(wireframe)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    else
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
     switch(Shader){
         case 0:
             UseFlatShading();
@@ -655,6 +671,7 @@ void OpenGL::paintGL(){
             UseFlatShading();
             break;
     }
+
 
     /*
     /* VBO of vertex *
