@@ -140,7 +140,6 @@ void OpenGL::CreateVertexIndices()
     //indices[1] = 1;
     //indices[2] = 2;
     //indices[3] = 3;*/
-
 }
 
 void OpenGL::initFlatShading(){
