@@ -120,7 +120,7 @@ void OpenGL::CreateVertexIndices()
     vertices[0] = QVector4D(0.0, 0.0, 0.0, 1.0);
     //vertices[1] = QVector4D(1.0, 1.0, 0.0, 1.0);
     //vertices[2] = QVector4D(0.5, 0.5, 0.0, 1.0);
-    //vertices[3] = QVector4D(-1.0, -1.0, 1.0, 1.0); */
+    //vertices[3] = QVector4D(-1.0, -1.0, 1.0, 1.0);*/
 
     /* Create vector to indices */
     if(indices){
@@ -128,16 +128,18 @@ void OpenGL::CreateVertexIndices()
         indices = NULL;
     }
     indices = new unsigned int[offr->num_faces * 3];
-    for(int i = 0; i < offr->num_faces; i++){
-        indices[i*3   ] = offr->faces[i][0];
-        indices[i*3 +1] = offr->faces[i][1];
-        indices[i*3 +2] = offr->faces[i][2];
+    int j = 0;
+    for(int i = 0; i < offr->num_faces*3; i+=3){
+        indices[i   ] = offr->faces[j][0];
+        indices[i +1] = offr->faces[j][1];
+        indices[i +2] = offr->faces[j][2];
+        j++;
     }
     /*DEBUG
     indices[0] = 0;
     //indices[1] = 1;
     //indices[2] = 2;
-    //indices[3] = 3; */
+    //indices[3] = 3;*/
 
 }
 
@@ -365,6 +367,80 @@ void OpenGL::UsePhong(){
     m_vboIndices->release();
 }
 
+void OpenGL::initPhongHalf(){
+    CreateVertexIndices();
+    CalculateNormal();
+
+    LoadShaders(":/Shaders/vshader.Phong.Half.glsl",":/Shaders/fshader.Phong.Half.glsl");
+
+    /* Create VBO to vertices */
+    if (m_vboVertices) delete m_vboVertices;
+    m_vboVertices = new QGLBuffer(QGLBuffer::VertexBuffer);
+    m_vboVertices->create();
+    m_vboVertices->bind();
+    m_vboVertices->setUsagePattern(QGLBuffer::StaticDraw);
+    m_vboVertices->allocate(vertices, offr->num_vertices * sizeof(QVector4D));
+    delete []vertices;
+    vertices = NULL;
+
+    /* Create VBO to normal */
+    if(m_vboNormal) delete m_vboNormal;
+    m_vboNormal = new QGLBuffer(QGLBuffer::VertexBuffer);
+    m_vboNormal->create();
+    m_vboNormal->bind();
+    m_vboNormal->setUsagePattern(QGLBuffer::StaticDraw);
+    m_vboNormal->allocate(normal, offr->num_faces * sizeof(QVector3D));
+    delete []normal;
+    normal = NULL;
+
+    /* Create VBO to indices */
+    if(m_vboIndices) delete m_vboIndices;
+    m_vboIndices = new QGLBuffer(QGLBuffer::VertexBuffer);
+    m_vboIndices->create();
+    m_vboIndices->bind();
+    m_vboIndices->setUsagePattern(QGLBuffer::StaticDraw);
+    m_vboIndices->allocate(indices, offr->num_faces*3*sizeof(GL_UNSIGNED_INT));
+    delete []indices;
+    indices = NULL;
+
+    QVector4D ambient_product  = light.ambient * material.ambient;
+    QVector4D diffuse_product  = light.diffuse * material.diffuse;
+    QVector4D specular_product = light.specular * material.specular;
+
+    m_shaderProgram->setUniformValue("AmbientProduct",ambient_product);
+    m_shaderProgram->setUniformValue("DiffuseProduct",diffuse_product);
+    m_shaderProgram->setUniformValue("SpecularProduct",specular_product);
+    m_shaderProgram->setUniformValue("LightPosition",light.position);
+    m_shaderProgram->setUniformValue("Shininess",material.shininess);
+
+}
+
+void OpenGL::UsePhongHalf(){
+    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+
+    m_vboVertices->bind();
+    m_shaderProgram->enableAttributeArray("vPosition");
+    m_shaderProgram->setAttributeBuffer("vPosition",GL_FLOAT,0,4,0);
+
+    m_vboNormal->bind();
+    m_shaderProgram->enableAttributeArray("vNormal");
+    m_shaderProgram->setAttributeBuffer("vNormal",GL_FLOAT,0,3,0);
+
+    m_shaderProgram->setUniformValue("Shininess",material.shininess);
+
+    m_vboIndices->bind();
+
+    //glDrawElements(GL_TRIANGLES, 3*( offr->num_faces ), GL_UNSIGNED_INT, 0);
+
+    //DEBUG GL_TRIANGLE_STRIP
+    //glDrawElements(GL_POINTS , 1, GL_UNSIGNED_INT, (GLvoid *) indices);
+    glDrawArrays( GL_TRIANGLES , 0, 3*( offr->num_faces ) );
+
+
+    m_vboVertices->release();
+    m_vboIndices->release();
+}
+
 void OpenGL::LoadShaders(std::string const &s1, std::string const &s2){
     m_shaderProgram->release();
 
@@ -494,6 +570,9 @@ void OpenGL::paintGL(){
             break;
         case 2:
             UsePhong();
+        case 3:
+            UsePhongHalf();
+            break;
         default:
             UseFlatShading();
             break;
@@ -533,6 +612,9 @@ void OpenGL::ChangeShader(int s){
             break;
         case 2:
             initPhong();
+            break;
+        case 3:
+            initPhongHalf();
             break;
         default:
             //initFlatShading();

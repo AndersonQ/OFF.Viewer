@@ -87,10 +87,12 @@ protected:
     void initFlatShading();
     void initGouraudShading();
     void initPhong();
+    void initPhongHalf();
 
     void UseFlatShading();
     void UseGouraud();
     void UsePhong();
+    void UsePhongHalf();
 
     void CreateVertexIndices();
 

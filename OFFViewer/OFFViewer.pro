@@ -40,4 +40,6 @@ OTHER_FILES += \
     Shaders/fshader.Gouraud.glsl \
     Shaders/vshader.Gouraud.glsl \
     Shaders/fshader.Phong.glsl \
-    Shaders/vshader.Phong.glsl
+    Shaders/vshader.Phong.glsl \
+    Shaders/fshader.Phong.Half.glsl \
+    Shaders/vshader.Phong.Half.glsl

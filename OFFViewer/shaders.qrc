@@ -6,5 +6,7 @@
         <file>Shaders/vshader.Gouraud.glsl</file>
         <file>Shaders/fshader.Phong.glsl</file>
         <file>Shaders/vshader.Phong.glsl</file>
+        <file>Shaders/fshader.Phong.Half.glsl</file>
+        <file>Shaders/vshader.Phong.Half.glsl</file>
     </qresource>
 </RCC>
