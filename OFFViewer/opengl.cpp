@@ -162,7 +162,6 @@ void OpenGL::initFlatShading(){
         FlatNormal[i*3    ] = normal[i];
         FlatNormal[i*3 + 1] = normal[i];
         FlatNormal[i*3 + 2] = normal[i];
-
     }
 
     /* Create VBO to vertices */
