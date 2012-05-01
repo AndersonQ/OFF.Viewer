@@ -4,5 +4,7 @@
         <file>vshader.glsl</file>
         <file>fshader.Flat.glsl</file>
         <file>vshader.Flat.glsl</file>
+        <file>fshader.Gouraud.glsl</file>
+        <file>vshader.Gouraud.glsl</file>
     </qresource>
 </RCC>

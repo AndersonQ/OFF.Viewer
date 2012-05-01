@@ -84,9 +84,13 @@ protected:
     void paintGL();
     void resizeGL(int width, int height);
 
-    void init_FlatShading();
+    void initFlatShading();
+    void initGouraudShading();
     void UseFlatShading();
+    void UseGouraud();
     void CreateVertexIndices();
+
+    void ChangeShader(int s);
 
     void LoadShaders(std::string const &s1, std::string const &s2);
     void CalculateNormal();

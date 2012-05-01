@@ -1228,6 +1228,11 @@
        <string>Flat Shading</string>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>Gouraud Shading</string>
+      </property>
+     </item>
     </widget>
    </widget>
   </widget>
