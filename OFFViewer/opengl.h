@@ -88,11 +88,13 @@ protected:
     void initGouraudShading();
     void initPhong();
     void initPhongHalf();
+    void initCartoon();
 
     void UseFlatShading();
     void UseGouraud();
     void UsePhong();
     void UsePhongHalf();
+    void UseCartoon();
 
     void CreateVertexIndices();
 

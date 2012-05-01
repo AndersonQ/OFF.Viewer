@@ -1243,6 +1243,11 @@
        <string>Phong Half-Way Vector</string>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>Cartoon Shading</string>
+      </property>
+     </item>
     </widget>
    </widget>
   </widget>

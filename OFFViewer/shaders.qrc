@@ -8,5 +8,7 @@
         <file>Shaders/vshader.Phong.glsl</file>
         <file>Shaders/fshader.Phong.Half.glsl</file>
         <file>Shaders/vshader.Phong.Half.glsl</file>
+        <file>Shaders/fshader.Cartoon.glsl</file>
+        <file>Shaders/vshader.Cartoon.glsl</file>
     </qresource>
 </RCC>
