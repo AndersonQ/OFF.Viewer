@@ -1,10 +1,10 @@
 <RCC>
     <qresource prefix="/">
-        <file>fshader.glsl</file>
-        <file>vshader.glsl</file>
-        <file>fshader.Flat.glsl</file>
-        <file>vshader.Flat.glsl</file>
-        <file>fshader.Gouraud.glsl</file>
-        <file>vshader.Gouraud.glsl</file>
+        <file>Shaders/fshader.Flat.glsl</file>
+        <file>Shaders/vshader.Flat.glsl</file>
+        <file>Shaders/fshader.Gouraud.glsl</file>
+        <file>Shaders/vshader.Gouraud.glsl</file>
+        <file>Shaders/fshader.Phong.glsl</file>
+        <file>Shaders/vshader.Phong.glsl</file>
     </qresource>
 </RCC>

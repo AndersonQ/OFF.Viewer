@@ -33,9 +33,11 @@ RESOURCES += \
     shaders.qrc
 
 OTHER_FILES += \
-    fshader.glsl \
-    vshader.glsl \
-    fshader.Flat.glsl \
-    vshader.Flat.glsl \
-    fshader.Gouraud.glsl \
-    vshader.Gouraud.glsl
+    Shaders/fshader.glsl \
+    Shaders/vshader.glsl \
+    Shaders/fshader.Flat.glsl \
+    Shaders/vshader.Flat.glsl \
+    Shaders/fshader.Gouraud.glsl \
+    Shaders/vshader.Gouraud.glsl \
+    Shaders/fshader.Phong.glsl \
+    Shaders/vshader.Phong.glsl

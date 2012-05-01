@@ -116,11 +116,11 @@ void OpenGL::CreateVertexIndices()
         vertices[i].setZ(offr->vertices[i][2]);
         vertices[i].setW(1.0);
     }
-    /*DEBUG */
+    /*DEBUG
     vertices[0] = QVector4D(0.0, 0.0, 0.0, 1.0);
     //vertices[1] = QVector4D(1.0, 1.0, 0.0, 1.0);
     //vertices[2] = QVector4D(0.5, 0.5, 0.0, 1.0);
-    //vertices[3] = QVector4D(-1.0, -1.0, 1.0, 1.0);
+    //vertices[3] = QVector4D(-1.0, -1.0, 1.0, 1.0); */
 
     /* Create vector to indices */
     if(indices){
@@ -133,11 +133,11 @@ void OpenGL::CreateVertexIndices()
         indices[i*3 +1] = offr->faces[i][1];
         indices[i*3 +2] = offr->faces[i][2];
     }
-    /*DEBUG */
+    /*DEBUG
     indices[0] = 0;
     //indices[1] = 1;
     //indices[2] = 2;
-    //indices[3] = 3;
+    //indices[3] = 3; */
 
 }
 
@@ -147,7 +147,7 @@ void OpenGL::initFlatShading(){
     QVector3D *FlatNormal;
 
     CreateVertexIndices();
-    LoadShaders(":/vshader.Flat.glsl",":/fshader.Flat.glsl");
+    LoadShaders(":/Shaders/vshader.Flat.glsl",":/Shaders/fshader.Flat.glsl");
     CalculateNormal();
 
     FlatVertices = new QVector4D[offr->num_faces * 3];
@@ -210,11 +210,11 @@ void OpenGL::UseFlatShading(){
     m_shaderProgram->enableAttributeArray("vNormal");
     m_shaderProgram->setAttributeBuffer("vNormal",GL_FLOAT,0,3,0);
 
-    //glDrawArrays( GL_TRIANGLES, 0, offr->num_faces*3 );
+    //glDrawArrays( GL_TRIANGLES, 0, offr->num_faces * 3 );
 
     //DEBUG GL_TRIANGLE_STRIP
     //glDrawElements( GL_LINES, 4, GL_UNSIGNED_INT, indices);
-    glDrawArrays( GL_TRIANGLE_STRIP , 0, offr->num_faces*3 );
+    glDrawArrays( GL_TRIANGLE_STRIP , 0, offr->num_faces * 3 );
 
     this->m_vboNormal->release();
     this->m_vboVertices->release();
@@ -223,7 +223,7 @@ void OpenGL::UseFlatShading(){
 void OpenGL::initGouraudShading(){
 
     CreateVertexIndices();
-    LoadShaders(":/vshader.Gouraud.glsl",":/fshader.Gouraud.glsl");
+    LoadShaders(":/Shaders/vshader.Gouraud.glsl",":/Shaders/fshader.Gouraud.glsl");
     CalculateNormal();
 
     /* Create VBO to vertices */
@@ -287,6 +287,80 @@ void OpenGL::UseGouraud(){
     //DEBUG GL_TRIANGLE_STRIP
     //glDrawElements(GL_POINTS , 1, GL_UNSIGNED_INT, (GLvoid *) indices);
     glDrawArrays( GL_TRIANGLE_STRIP , 0, offr->num_faces * 3 );
+
+    m_vboVertices->release();
+    m_vboIndices->release();
+}
+
+void OpenGL::initPhong(){
+
+    CreateVertexIndices();
+    CalculateNormal();
+
+    LoadShaders(":/Shaders/vshader.Phong.glsl",":/Shaders/fshader.Phong.glsl");
+
+    /* Create VBO to vertices */
+    if (m_vboVertices) delete m_vboVertices;
+    m_vboVertices = new QGLBuffer(QGLBuffer::VertexBuffer);
+    m_vboVertices->create();
+    m_vboVertices->bind();
+    m_vboVertices->setUsagePattern(QGLBuffer::StaticDraw);
+    m_vboVertices->allocate(vertices, offr->num_vertices * sizeof(QVector4D));
+    delete []vertices;
+    vertices = NULL;
+
+    /* Create VBO to normal */
+    if(m_vboNormal) delete m_vboNormal;
+    m_vboNormal = new QGLBuffer(QGLBuffer::VertexBuffer);
+    m_vboNormal->create();
+    m_vboNormal->bind();
+    m_vboNormal->setUsagePattern(QGLBuffer::StaticDraw);
+    m_vboNormal->allocate(normal, offr->num_faces * sizeof(QVector3D));
+    delete []normal;
+    normal = NULL;
+
+    /* Create VBO to indices */
+    if(m_vboIndices) delete m_vboIndices;
+    m_vboIndices = new QGLBuffer(QGLBuffer::VertexBuffer);
+    m_vboIndices->create();
+    m_vboIndices->bind();
+    m_vboIndices->setUsagePattern(QGLBuffer::StaticDraw);
+    m_vboIndices->allocate(indices, offr->num_faces*3*sizeof(GL_UNSIGNED_INT));
+    delete []indices;
+    indices = NULL;
+
+    QVector4D ambient_product  = light.ambient * material.ambient;
+    QVector4D diffuse_product  = light.diffuse * material.diffuse;
+    QVector4D specular_product = light.specular * material.specular;
+
+    m_shaderProgram->setUniformValue("AmbientProduct",ambient_product);
+    m_shaderProgram->setUniformValue("DiffuseProduct",diffuse_product);
+    m_shaderProgram->setUniformValue("SpecularProduct",specular_product);
+    m_shaderProgram->setUniformValue("LightPosition",light.position);
+    m_shaderProgram->setUniformValue("Shininess",material.shininess);
+}
+
+void OpenGL::UsePhong(){
+    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+
+    m_vboVertices->bind();
+    m_shaderProgram->enableAttributeArray("vPosition");
+    m_shaderProgram->setAttributeBuffer("vPosition",GL_FLOAT,0,4,0);
+
+    m_vboNormal->bind();
+    m_shaderProgram->enableAttributeArray("vNormal");
+    m_shaderProgram->setAttributeBuffer("vNormal",GL_FLOAT,0,3,0);
+
+    m_shaderProgram->setUniformValue("Shininess",material.shininess);
+
+    m_vboIndices->bind();
+
+    //glDrawElements(GL_TRIANGLES, 3*( offr->num_faces ), GL_UNSIGNED_INT, 0);
+
+    //DEBUG GL_TRIANGLE_STRIP
+    //glDrawElements(GL_POINTS , 1, GL_UNSIGNED_INT, (GLvoid *) indices);
+    glDrawArrays( GL_TRIANGLE_STRIP , 0, offr->num_faces * 3 );
+
 
     m_vboVertices->release();
     m_vboIndices->release();
@@ -419,6 +493,8 @@ void OpenGL::paintGL(){
         case 1:
             UseGouraud();
             break;
+        case 2:
+            UsePhong();
         default:
             UseFlatShading();
             break;
@@ -456,8 +532,14 @@ void OpenGL::ChangeShader(int s){
         case 1:
             initGouraudShading();
             break;
+        case 2:
+            initPhong();
+            break;
         default:
-            initFlatShading();
+            //initFlatShading();
+            printf("ERROR ChangeShader recived %d\n", s);
+            fflush(stdout);
+            exit(0);
             break;
     }
 }

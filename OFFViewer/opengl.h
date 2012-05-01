@@ -57,7 +57,7 @@ protected:
     QVector3D *normal;
     QVector4D *vertices;
     unsigned int *indices;
-    int num_vertices, num_faces, num_edge;
+    GLint num_vertices, num_faces, num_edge;
 
     QMatrix4x4 ModelView, MatrixProjection, MatrixRotation;
     QMatrix3x3 MatrixNormal;
@@ -86,8 +86,12 @@ protected:
 
     void initFlatShading();
     void initGouraudShading();
+    void initPhong();
+
     void UseFlatShading();
     void UseGouraud();
+    void UsePhong();
+
     void CreateVertexIndices();
 
     void ChangeShader(int s);
