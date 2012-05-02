@@ -46,4 +46,6 @@ OTHER_FILES += \
     Shaders/fshader.Cartoon.glsl \
     Shaders/vshader.Cartoon.glsl \
     Shaders/fshader.Simple.Tex.Mapping.glsl \
-    Shaders/vshader.Simple.Tex.Mapping.glsl
+    Shaders/vshader.Simple.Tex.Mapping.glsl \
+    Shaders/fshader.Cube.Mapping.glsl \
+    Shaders/vshader.Cube.Mapping.glsl

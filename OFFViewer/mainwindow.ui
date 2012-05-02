@@ -1256,6 +1256,11 @@
        <string>Simple Texture Mapping</string>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>Cube Mapping</string>
+      </property>
+     </item>
     </widget>
    </widget>
   </widget>

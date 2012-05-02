@@ -12,6 +12,8 @@
         <file>Shaders/vshader.Cartoon.glsl</file>
         <file>Shaders/fshader.Simple.Tex.Mapping.glsl</file>
         <file>Shaders/vshader.Simple.Tex.Mapping.glsl</file>
+        <file>Shaders/fshader.Cube.Mapping.glsl</file>
+        <file>Shaders/vshader.Cube.Mapping.glsl</file>
     </qresource>
     <qresource prefix="/Textures">
         <file>Textures/BTStone.bmp</file>

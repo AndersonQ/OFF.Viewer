@@ -95,6 +95,7 @@ protected:
     void initPhongHalf();
     void initCartoon();
     void initSimpleTexMapping();
+    void initCubeMapping();
 
     void UseFlatShading();
     void UseGouraud();
@@ -102,6 +103,7 @@ protected:
     void UsePhongHalf();
     void UseCartoon();
     void UseSimpleTexMapping();
+    void UseCubeMapping();
 
     void CreateVertexIndices();
 

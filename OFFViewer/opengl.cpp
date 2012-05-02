@@ -106,8 +106,8 @@ void OpenGL::initializeGL(){
     initFlatShading();
     glClearColor(0.0, 1.0, 0.0, 1.0);
 
-    /* Cullface true */
-    glEnable(GL_CULL_FACE);
+    /* Cullface false */
+    glDisable(GL_CULL_FACE);
 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(Spin()));
@@ -580,7 +580,7 @@ void OpenGL::UseSimpleTexMapping(){
 
     m_vboIndices->bind();
 
-    glDrawElements(GL_TRIANGLE_STRIP, 3*offr->num_faces, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 3*offr->num_faces, GL_UNSIGNED_INT, 0);
 
     //DEBUG GL_TRIANGLE_STRIP
     //glDrawElements(GL_POINTS , 1, GL_UNSIGNED_INT, (GLvoid *) indices);
@@ -589,6 +589,82 @@ void OpenGL::UseSimpleTexMapping(){
     m_vboVertices->release();
     m_vboIndices->release();
     m_vboTexCoords->release();
+}
+
+void OpenGL::initCubeMapping(){
+    QImage img[6];
+
+    LoadShaders(":/Shaders/vshader.Cube.Mapping.glsl",":/Shaders/fshader.Cube.Mapping.glsl");
+
+    img[0] = QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/negx.png","PNG");
+    img[1] = QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/negy.png","PNG");
+    img[2] = QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/negz.png","PNG");
+    img[3] = QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/posx.png","PNG");
+    img[4] = QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/posy.png","PNG");
+    img[5] = QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/posz.png","PNG");
+
+    if(m_vboVertices) delete m_vboVertices;
+    m_vboVertices = new QGLBuffer(QGLBuffer::VertexBuffer);
+    m_vboVertices->create();
+    m_vboVertices->bind();
+    m_vboVertices->setUsagePattern(QGLBuffer::StaticDraw);
+    m_vboVertices->allocate(vertices, offr->num_vertices * sizeof(QVector4D));
+    delete []vertices;
+    vertices =NULL;
+
+    if(m_vboNormal) delete m_vboNormal;
+    m_vboNormal = new QGLBuffer(QGLBuffer::VertexBuffer);
+    m_vboNormal->create();
+    m_vboNormal->bind();
+    m_vboNormal->setUsagePattern(QGLBuffer::StaticDraw);
+    m_vboNormal->allocate(normal, offr->num_vertices * sizeof(QVector3D));
+    delete []normal;
+    normal = NULL;
+
+    if(m_vboIndices) delete m_vboIndices;
+    m_vboIndices = new QGLBuffer(QGLBuffer::IndexBuffer);
+    m_vboIndices->create();
+    m_vboIndices->bind();
+    m_vboIndices->setUsagePattern(QGLBuffer::StaticDraw);
+    m_vboIndices->allocate(indices , offr->num_faces * 3 * sizeof(GL_UNSIGNED_INT));
+    delete []this->indices;
+    indices = NULL;
+
+    m_shaderProgram->setUniformValue("texMap",0);
+
+    glActiveTexture(GL_TEXTURE0);
+    QGLWidget::bindTexture(img[0],GL_TEXTURE_CUBE_MAP);
+
+    QGLWidget::bindTexture(img[0],GL_TEXTURE_CUBE_MAP_NEGATIVE_X);
+    QGLWidget::bindTexture(img[4],GL_TEXTURE_CUBE_MAP_NEGATIVE_Y);
+    QGLWidget::bindTexture(img[2],GL_TEXTURE_CUBE_MAP_NEGATIVE_Z);
+    QGLWidget::bindTexture(img[3],GL_TEXTURE_CUBE_MAP_POSITIVE_X);
+    QGLWidget::bindTexture(img[1],GL_TEXTURE_CUBE_MAP_POSITIVE_Y);
+    QGLWidget::bindTexture(img[5],GL_TEXTURE_CUBE_MAP_POSITIVE_Z);
+
+}
+
+void OpenGL::UseCubeMapping(){
+    m_vboVertices->bind();
+    m_shaderProgram->enableAttributeArray("vPosition");
+    m_shaderProgram->setAttributeBuffer("vPosition", GL_FLOAT,0,4,0);
+
+    m_vboNormal->bind();
+    m_shaderProgram->enableAttributeArray("vNormal");
+    m_shaderProgram->setAttributeBuffer("vNormal", GL_FLOAT,0,3,0);
+
+    m_vboIndices->bind();
+
+    glDrawElements(GL_TRIANGLES, 3 * offr->num_faces, GL_UNSIGNED_INT, 0);
+
+    //DEBUG GL_TRIANGLE_STRIP
+    //glDrawElements(GL_POINTS , 1, GL_UNSIGNED_INT, (GLvoid *) indices);
+    //glDrawArrays( GL_TRIANGLE_STRIP , 0, 3 * ( offr->num_faces ) );
+
+
+    m_vboVertices->release();
+    m_vboIndices->release();
+
 }
 
 void OpenGL::ChooseTexture(){
@@ -795,6 +871,9 @@ void OpenGL::paintGL(){
         case 5:
             UseSimpleTexMapping();
             break;
+        case 6:
+            UseCubeMapping();
+            break;
         default:
             //UseFlatShading();
             printf("ERROR Shader recived %d\n", Shader);
@@ -847,6 +926,9 @@ void OpenGL::ChangeShader(int s){
             break;
         case 5:
             initSimpleTexMapping();
+            break;
+        case 6:
+            initCubeMapping();
             break;
         default:
             //initFlatShading();
