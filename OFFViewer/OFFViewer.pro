@@ -44,4 +44,6 @@ OTHER_FILES += \
     Shaders/fshader.Phong.Half.glsl \
     Shaders/vshader.Phong.Half.glsl \
     Shaders/fshader.Cartoon.glsl \
-    Shaders/vshader.Cartoon.glsl
+    Shaders/vshader.Cartoon.glsl \
+    Shaders/fshader.Simple.Tex.Mapping.glsl \
+    Shaders/vshader.Simple.Tex.Mapping.glsl

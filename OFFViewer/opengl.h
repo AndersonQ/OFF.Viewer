@@ -50,11 +50,13 @@ protected:
     QGLBuffer *m_vboNormal;
     QGLBuffer *m_vboColours;
     QGLBuffer *m_vboIndices;
+    QGLBuffer *m_vboTexCoords;
 
     QVector3D *faces;
     QVector3D *colours;
 
-    QVector3D *normal;
+    QVector2D *texcoords;
+    QVector3D *normal, *tangents, *bitangents;
     QVector4D *vertices;
     unsigned int *indices;
     GLint num_vertices, num_faces, num_edge;
@@ -68,7 +70,8 @@ protected:
 
     QTimer *timer;
 
-    QImage *TexImage, *TexNormal;
+    QImage *texColor, *texNormal;
+    int SelectedImage, SelectedCoord;
 
     bool wireframe;
     bool OneColour;
@@ -101,7 +104,12 @@ protected:
     void UseSimpleTexMapping();
 
     void CreateVertexIndices();
+
     void ChooseTexture();
+    void ChooseCoordinates();
+    void GenTexCoordsCylinder();
+    void GenTexCoordsSphere();
+    void GenTexCoordsTriangles();
 
     void ChangeShader(int s);
 

@@ -28,11 +28,21 @@ OpenGL::OpenGL(QWidget *parent) :
     m_vboNormal = NULL;
     m_vboColours = NULL;
     m_vboIndices = NULL;
+    m_vboTexCoords = NULL;
     vertices = NULL;
     indices = NULL;
     normal = NULL;
+    tangents = NULL;
+    bitangents = NULL;
+    texcoords = NULL;
 
-    TexImage = TexNormal = NULL;
+    texColor = texNormal = NULL;
+
+    /* Defautl texture */
+    SelectedImage = 0;
+
+    /* Default coorninates mapping */
+    SelectedCoord = 0;
 
     /* Backgound initial colour */
     BgRed = BgGreen = BgBlue = 0;
@@ -52,7 +62,7 @@ OpenGL::OpenGL(QWidget *parent) :
 void OpenGL::initializeGL(){
     glEnable(GL_DEPTH_TEST);
 
-    wireframe = true;
+    wireframe = false;
     zoom = 100;
 
     offr = new OFFReader((char *) "/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/Models.OFF/sphere.off");
@@ -519,10 +529,125 @@ void OpenGL::UseCartoon(){
 
 
 void OpenGL::initSimpleTexMapping(){
+    CreateVertexIndices();
+    CalculateNormal();
 
+    ChooseTexture();
+    ChooseCoordinates();
+
+    LoadShaders(":/Shaders/vshader.Simple.Tex.Mapping.glsl",":/Shaders/fshader.Simple.Tex.Mapping.glsl");
+
+    if(m_vboVertices) delete m_vboVertices;
+    m_vboVertices = new QGLBuffer(QGLBuffer::VertexBuffer);
+    m_vboVertices->create();
+    m_vboVertices->bind();
+    m_vboVertices->setUsagePattern(QGLBuffer::StaticDraw);
+    m_vboVertices->allocate(vertices , offr->num_vertices*sizeof(QVector4D));
+    delete []vertices;
+    vertices = NULL;
+
+    if(m_vboTexCoords) delete m_vboTexCoords;
+    m_vboTexCoords = new QGLBuffer(QGLBuffer::VertexBuffer);
+    m_vboTexCoords->create();
+    m_vboTexCoords->bind();
+    m_vboTexCoords->setUsagePattern(QGLBuffer::StaticDraw);
+    m_vboTexCoords->allocate(texcoords , offr->num_vertices*sizeof(QVector2D));
+    delete []texcoords;
+    texcoords =NULL;
+
+    if(m_vboIndices) delete m_vboIndices;
+    m_vboIndices = new QGLBuffer(QGLBuffer::IndexBuffer);
+    m_vboIndices->create();
+    m_vboIndices->bind();
+    m_vboIndices->setUsagePattern(QGLBuffer::StaticDraw);
+    m_vboIndices->allocate(indices , offr->num_faces*3*sizeof(GL_UNSIGNED_INT));
+    delete []indices;
+    indices =NULL;
+
+    glActiveTexture(GL_TEXTURE0);
+    QGLWidget::bindTexture((*texColor));
+    m_shaderProgram->setUniformValue("texMap_SM",0);
+}
+
+void OpenGL::UseSimpleTexMapping(){
+    m_vboVertices->bind();
+    m_shaderProgram->enableAttributeArray("vPosition");
+    m_shaderProgram->setAttributeBuffer("vPosition",GL_FLOAT,0,4,0);
+
+    m_vboTexCoords->bind();
+    m_shaderProgram->enableAttributeArray("vTexCoords_SM");
+    m_shaderProgram->setAttributeBuffer("vTexCoords_SM",GL_FLOAT,0,2,0);
+
+    m_vboIndices->bind();
+
+    glDrawElements(GL_TRIANGLE_STRIP, 3*offr->num_faces, GL_UNSIGNED_INT, 0);
+
+    //DEBUG GL_TRIANGLE_STRIP
+    //glDrawElements(GL_POINTS , 1, GL_UNSIGNED_INT, (GLvoid *) indices);
+    //glDrawArrays( GL_TRIANGLE_STRIP , 0, 3 * ( offr->num_faces ) );
+
+    m_vboVertices->release();
+    m_vboIndices->release();
+    m_vboTexCoords->release();
 }
 
 void OpenGL::ChooseTexture(){
+
+    if (texColor) delete texColor;
+
+    switch(SelectedImage)
+    {
+        case 0:
+            texColor = new QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/stone_color128.jpg","JPG");
+            break;
+        default:
+            printf("ERROR: SelectedImage = %d\n", SelectedImage);
+            exit(0);
+            break;
+    }
+
+}
+
+void OpenGL::ChooseCoordinates(){
+    switch(SelectedCoord)
+    {
+        case 0:
+            GenTexCoordsCylinder();
+            break;
+        default:
+            printf("ERROR: SelectedCoord = %d\n", SelectedImage);
+            exit(0);
+            break;
+    }
+}
+
+void OpenGL::GenTexCoordsCylinder(){
+
+    double max_x = -1e10, min_x = 1e10;
+    double max_y = -1e10, min_y = 1e10;
+    double max_z = -1e10, min_z = 1e10;
+    double u, v, x;
+
+    if(texcoords)
+        delete[] texcoords;
+
+    texcoords = new QVector2D[offr->num_vertices];
+
+    for(int i = 0; i < offr->num_vertices; i++){
+        if(vertices[i].x() > max_x) max_x = vertices[i].x();
+        if(vertices[i].x() < min_x) min_x = vertices[i].x();
+        if(vertices[i].y() > max_y) max_y = vertices[i].y();
+        if(vertices[i].y() < min_y) min_y = vertices[i].y();
+        if(vertices[i].z() > max_z) max_z = vertices[i].z();
+        if(vertices[i].z() < min_z) min_z = vertices[i].z();
+    }
+
+    for (int i = 0; i < offr->num_vertices; i++){
+        x = 2*(vertices[i].x() - min_x)/(max_x-min_x) - 1;
+        u = ::acos(x)/(3.14);
+        v = (vertices[i].y() - min_y)/(max_y-min_y);
+        texcoords[i] = QVector2D(u,v);
+    }
 
 }
 
@@ -667,8 +792,14 @@ void OpenGL::paintGL(){
         case 4:
             UseCartoon();
             break;
+        case 5:
+            UseSimpleTexMapping();
+            break;
         default:
-            UseFlatShading();
+            //UseFlatShading();
+            printf("ERROR Shader recived %d\n", Shader);
+            fflush(stdout);
+            exit(0);
             break;
     }
 
@@ -713,6 +844,9 @@ void OpenGL::ChangeShader(int s){
             break;
         case 4:
             initCartoon();
+            break;
+        case 5:
+            initSimpleTexMapping();
             break;
         default:
             //initFlatShading();

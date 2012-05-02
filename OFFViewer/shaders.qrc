@@ -10,5 +10,29 @@
         <file>Shaders/vshader.Phong.Half.glsl</file>
         <file>Shaders/fshader.Cartoon.glsl</file>
         <file>Shaders/vshader.Cartoon.glsl</file>
+        <file>Shaders/fshader.Simple.Tex.Mapping.glsl</file>
+        <file>Shaders/vshader.Simple.Tex.Mapping.glsl</file>
+    </qresource>
+    <qresource prefix="/Textures">
+        <file>Textures/BTStone.bmp</file>
+        <file>Textures/checkerboard.png</file>
+        <file>Textures/cubemap_negx.jpg</file>
+        <file>Textures/cubemap_negy.jpg</file>
+        <file>Textures/cubemap_negz.jpg</file>
+        <file>Textures/cubemap_posx.jpg</file>
+        <file>Textures/cubemap_posy.jpg</file>
+        <file>Textures/cubemap_posz.jpg</file>
+        <file>Textures/fieldstone-c.jpg</file>
+        <file>Textures/fieldstone-n.jpg</file>
+        <file>Textures/leaf_color500.jpg</file>
+        <file>Textures/leaf_norm500.jpg</file>
+        <file>Textures/negx.jpg</file>
+        <file>Textures/negy.jpg</file>
+        <file>Textures/negz.jpg</file>
+        <file>Textures/posx.jpg</file>
+        <file>Textures/posy.jpg</file>
+        <file>Textures/posz.jpg</file>
+        <file>Textures/stone_color128.jpg</file>
+        <file>Textures/ufabc.jpg</file>
     </qresource>
 </RCC>
