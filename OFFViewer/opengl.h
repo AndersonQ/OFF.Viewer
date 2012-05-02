@@ -51,6 +51,9 @@ protected:
     QGLBuffer *m_vboColours;
     QGLBuffer *m_vboIndices;
     QGLBuffer *m_vboTexCoords;
+    QGLBuffer *m_vboTangents;
+    QGLBuffer *m_vboBitangents;
+
 
     QVector3D *faces;
     QVector3D *colours;
@@ -96,6 +99,7 @@ protected:
     void initCartoon();
     void initSimpleTexMapping();
     void initCubeMapping();
+    void initNormalMapping();
 
     void UseFlatShading();
     void UseGouraud();
@@ -104,6 +108,7 @@ protected:
     void UseCartoon();
     void UseSimpleTexMapping();
     void UseCubeMapping();
+    void UseNormalMapping();
 
     void CreateVertexIndices();
 
@@ -112,11 +117,13 @@ protected:
     void GenTexCoordsCylinder();
     void GenTexCoordsSphere();
     void GenTexCoordsTriangles();
+    void genTangentFrames();
 
     void ChangeShader(int s);
 
     void LoadShaders(std::string const &s1, std::string const &s2);
     void CalculateNormal();
+    void CalculateNormalVertices();
 
     void InitializeVBOs();
 

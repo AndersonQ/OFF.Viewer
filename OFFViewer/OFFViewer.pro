@@ -48,4 +48,6 @@ OTHER_FILES += \
     Shaders/fshader.Simple.Tex.Mapping.glsl \
     Shaders/vshader.Simple.Tex.Mapping.glsl \
     Shaders/fshader.Cube.Mapping.glsl \
-    Shaders/vshader.Cube.Mapping.glsl
+    Shaders/vshader.Cube.Mapping.glsl \
+    Shaders/vshader.Normal.Mapping.glsl \
+    Shaders/fshader.Normal.Mapping.glsl
