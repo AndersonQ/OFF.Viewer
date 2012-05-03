@@ -42,6 +42,6 @@ void main()
     else
         color2 *= 0.1;
 
-    gl_FragColor = (color * normalize(LightPosition)) + 0.5*(color2 * normalize(LightPosition2));
+    gl_FragColor = (color * 0.1*normalize(LightPosition.xyz)) + 0.5*(color2 * 0.1*normalize(LightPosition2.xyz));
     gl_FragColor.a = 1.0;
 }
