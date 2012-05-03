@@ -18,6 +18,7 @@
         <file>Shaders/vshader.Normal.Mapping.glsl</file>
         <file>Shaders/fshader.Phong2.glsl</file>
         <file>Shaders/fshader.Cartoon2.glsl</file>
+        <file>Shaders/fshader.CartoonY.glsl</file>
     </qresource>
     <qresource prefix="/Textures">
         <file>Textures/BTStone.bmp</file>

@@ -52,4 +52,5 @@ OTHER_FILES += \
     Shaders/vshader.Normal.Mapping.glsl \
     Shaders/fshader.Normal.Mapping.glsl \
     Shaders/fshader.Phong2.glsl \
-    Shaders/fshader.Cartoon2.glsl
+    Shaders/fshader.Cartoon2.glsl \
+    Shaders/fshader.CartoonY.glsl

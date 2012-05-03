@@ -1242,6 +1242,11 @@
       </item>
       <item>
        <property name="text">
+        <string>CartoonY</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>Simple Texture Mapping</string>
        </property>
       </item>
