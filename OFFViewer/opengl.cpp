@@ -478,7 +478,7 @@ void OpenGL::UsePhong2(){
 
     m_vboIndices->bind();
 
-    light.position = QVector4D(0, 2, 0, 0.0);
+    //light.position = QVector4D(0, 2, 0, 0.0);
 
     QVector4D ambient_product  = light.ambient * material.ambient;
     QVector4D diffuse_product  = light.diffuse * material.diffuse;
@@ -1683,50 +1683,73 @@ void OpenGL::SetMatSpecz(int i){
 }
 void OpenGL::SetLightAmbx(int i){
     light.ambient.setX(i/255.0);
+    light.ambient2.setX(i/255.0);
     updateGL();
 }
 void OpenGL::SetLightAmby(int i){
     light.ambient.setX(i/255.0);
+    light.ambient2.setX(i/255.0);
+
     updateGL();
 }
 void OpenGL::SetLightAmbz(int i){
     light.ambient.setX(i/255.0);
+    light.ambient2.setX(i/255.0);
+
     updateGL();
 }
 void OpenGL::SetLightDifx(int i){
     light.diffuse.setX(i/255.0);
+    light.diffuse2.setX(i/255.0);
+
     updateGL();
 }
 void OpenGL::SetLightDify(int i){
     light.diffuse.setX(i/255.0);
+    light.diffuse2.setX(i/255.0);
+
     updateGL();
 }
 void OpenGL::SetLightDifz(int i){
     light.diffuse.setX(i/255.0);
+    light.diffuse2.setX(i/255.0);
+
     updateGL();
 }
 void OpenGL::SetLightSpecx(int i){
     light.specular.setX(i/255.0);
+    light.specular2.setX(i/255.0);
+
     updateGL();
 }
 void OpenGL::SetLightSpecy(int i){
     light.specular.setX(i/255.0);
+    light.specular2.setX(i/255.0);
+
     updateGL();
 }
 void OpenGL::SetLightSpecz(int i){
     light.specular.setX(i/255.0);
+    light.specular2.setX(i/255.0);
+
     updateGL();
 }
 void OpenGL::SetLightEyecx(double i){
     light.position.setX(i);
+    light.position2.setX(-i);
+
     updateGL();
 }
 void OpenGL::SetLightEyecy(double i){
-    light.position.setX(i);
+    light.position.setY(i);
+    light.position2.setY(-i);
+
     updateGL();
 }
 void OpenGL::SetLightEyecz(double i){
-    light.position.setX(i);
+    light.position.setZ(i);
+    light.position.setZ(-i);
+
     updateGL();
 }
 
