@@ -98,6 +98,7 @@ protected:
     void initPhong2();
     void initPhongHalf();
     void initCartoon();
+    void initCartoon2();
     void initSimpleTexMapping();
     void initCubeMapping();
     void initNormalMapping();
@@ -108,6 +109,7 @@ protected:
     void UsePhong2();
     void UsePhongHalf();
     void UseCartoon();
+    void UseCartoon2();
     void UseSimpleTexMapping();
     void UseCubeMapping();
     void UseNormalMapping();

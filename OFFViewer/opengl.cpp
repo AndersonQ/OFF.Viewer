@@ -677,6 +677,110 @@ void OpenGL::UseCartoon(){
     m_vboIndices->release();
 }
 
+void OpenGL::initCartoon2(){
+    CreateVertexIndices();
+    //CalculateNormal();
+    CalculateNormalVertices();
+
+    LoadShaders(":/Shaders/vshader.Cartoon.glsl",":/Shaders/fshader.Cartoon2.glsl");
+
+    /* Create VBO to vertices */
+    if(m_vboVertices) delete m_vboVertices;
+    m_vboVertices = new QGLBuffer(QGLBuffer::VertexBuffer);
+    m_vboVertices->create();
+    m_vboVertices->bind();
+    m_vboVertices->setUsagePattern(QGLBuffer::StaticDraw);
+    m_vboVertices->allocate(vertices , offr->num_vertices * sizeof(QVector4D));
+    delete []vertices;
+    vertices = NULL;
+
+    /* Create VBO to normal */
+    if(m_vboNormal) delete m_vboNormal;
+    m_vboNormal = new QGLBuffer(QGLBuffer::VertexBuffer);
+    m_vboNormal->create();
+    m_vboNormal->bind();
+    m_vboNormal->setUsagePattern(QGLBuffer::StaticDraw);
+    m_vboNormal->allocate(normal, offr->num_vertices * sizeof(QVector3D));
+    delete []normal;
+    normal = NULL;
+
+    /* Create VBO to indices */
+    if(m_vboIndices) delete m_vboIndices;
+    m_vboIndices = new QGLBuffer(QGLBuffer::IndexBuffer);
+    m_vboIndices->create();
+    m_vboIndices->bind();
+    m_vboIndices->setUsagePattern(QGLBuffer::StaticDraw);
+    m_vboIndices->allocate(indices, offr->num_faces * 3 * sizeof(GL_UNSIGNED_INT));
+    delete []indices;
+    indices = NULL;
+
+    QVector4D ambient_product  = light.ambient * material.ambient;
+    QVector4D diffuse_product  = light.diffuse * material.diffuse;
+    QVector4D specular_product = light.specular * material.specular;
+
+    m_shaderProgram->setUniformValue("AmbientProduct",ambient_product);
+    m_shaderProgram->setUniformValue("DiffuseProduct",diffuse_product);
+    m_shaderProgram->setUniformValue("SpecularProduct",specular_product);
+    m_shaderProgram->setUniformValue("LightPosition",light.position);
+    m_shaderProgram->setUniformValue("Shininess",material.shininess);
+
+    QVector4D ambient_product2  = light.ambient2 * material.ambient;
+    QVector4D diffuse_product2  = light.diffuse2 * material.diffuse;
+    QVector4D specular_product2 = light.specular2 * material.specular;
+
+    m_shaderProgram->setUniformValue("AmbientProduct2",ambient_product2);
+    m_shaderProgram->setUniformValue("DiffuseProduct2",diffuse_product2);
+    m_shaderProgram->setUniformValue("SpecularProduct2",specular_product2);
+    m_shaderProgram->setUniformValue("LightPosition2",light.position2);
+    m_shaderProgram->setUniformValue("Shininess2",material.shininess);
+
+    /*QVector4D diffuse_product  = light.diffuse * material.diffuse;
+
+    m_shaderProgram->setUniformValue("DiffuseProduct",diffuse_product);
+    m_shaderProgram->setUniformValue("LightPosition",light.position);*/
+}
+
+void OpenGL::UseCartoon2(){
+    m_vboVertices->bind();
+    m_shaderProgram->enableAttributeArray("vPosition");
+    m_shaderProgram->setAttributeBuffer("vPosition",GL_FLOAT,0,4,0);
+
+    m_vboNormal->bind();
+    m_shaderProgram->enableAttributeArray("vNormal");
+    m_shaderProgram->setAttributeBuffer("vNormal",GL_FLOAT,0,3,0);
+
+    m_vboIndices->bind();
+
+    QVector4D ambient_product  = light.ambient * material.ambient;
+    QVector4D diffuse_product  = light.diffuse * material.diffuse;
+    QVector4D specular_product = light.specular * material.specular;
+
+    m_shaderProgram->setUniformValue("AmbientProduct",ambient_product);
+    m_shaderProgram->setUniformValue("DiffuseProduct",diffuse_product);
+    m_shaderProgram->setUniformValue("SpecularProduct",specular_product);
+    m_shaderProgram->setUniformValue("LightPosition",light.position);
+    m_shaderProgram->setUniformValue("Shininess",material.shininess);
+
+    QVector4D ambient_product2  = light.ambient2 * material.ambient;
+    QVector4D diffuse_product2  = light.diffuse2 * material.diffuse;
+    QVector4D specular_product2 = light.specular2 * material.specular;
+
+    m_shaderProgram->setUniformValue("AmbientProduct2",ambient_product2);
+    m_shaderProgram->setUniformValue("DiffuseProduct2",diffuse_product2);
+    m_shaderProgram->setUniformValue("SpecularProduct2",specular_product2);
+    m_shaderProgram->setUniformValue("LightPosition2",light.position2);
+    m_shaderProgram->setUniformValue("Shininess2",material.shininess);
+
+    glDrawElements(GL_TRIANGLES, 3*( offr->num_faces ), GL_UNSIGNED_INT, 0);
+
+    //DEBUG GL_TRIANGLE_STRIP
+    //glDrawElements(GL_POINTS , 1, GL_UNSIGNED_INT, (GLvoid *) indices);
+    //glDrawArrays( GL_TRIANGLE_STRIP , 0, 3 * ( offr->num_faces ) );
+
+    m_vboVertices->release();
+    m_vboIndices->release();
+}
+
 
 void OpenGL::initSimpleTexMapping(){
     CreateVertexIndices();
@@ -1321,12 +1425,15 @@ void OpenGL::paintGL(){
             UseCartoon();
             break;
         case 6:
-            UseSimpleTexMapping();
+            UseCartoon2();
             break;
         case 7:
-            UseCubeMapping();
+            UseSimpleTexMapping();
             break;
         case 8:
+            UseCubeMapping();
+            break;
+        case 9:
             UseNormalMapping();
             break;
         default:
@@ -1383,12 +1490,15 @@ void OpenGL::ChangeShader(int s){
             initCartoon();
             break;
         case 6:
-            initSimpleTexMapping();
+            initCartoon2();
             break;
         case 7:
-            initCubeMapping();
+            initSimpleTexMapping();
             break;
         case 8:
+            initCubeMapping();
+            break;
+        case 9:
             initNormalMapping();
             break;
         default:

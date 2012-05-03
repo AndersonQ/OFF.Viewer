@@ -1222,7 +1222,7 @@
       </item>
       <item>
        <property name="text">
-        <string>Two lights</string>
+        <string>Phong Two lights</string>
        </property>
       </item>
       <item>
@@ -1233,6 +1233,11 @@
       <item>
        <property name="text">
         <string>Cartoon Shading</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Cartoon Two lights</string>
        </property>
       </item>
       <item>
