@@ -31,17 +31,17 @@ void main()
     else
         color *= 0.1;
 
-    if(intensit2y > 0.8)
+    if(intensity2 > 0.8)
         color2 *= 0.9;
-    else if(intensity > 0.6)
+    else if(intensity2 > 0.6)
         color2 *= 0.6;
-    else if(intensity > 0.4)
+    else if(intensity2 > 0.4)
         color2 *= 0.4;
-    else if(intensity > 0.2)
+    else if(intensity2 > 0.2)
         color2 *= 0.2;
     else
         color2 *= 0.1;
 
-    gl_FragColor = (color * 0.1*normalize(LightPosition.xyz)) + 0.5*(color2 * 0.1*normalize(LightPosition2.xyz));
+    gl_FragColor = (color * normalize(LightPosition)) + 0.5*(color2 * normalize(LightPosition2));
     gl_FragColor.a = 1.0;
 }
