@@ -170,9 +170,9 @@ void OpenGL::initFlatShading(){
 
     for(int i = 0; i < offr->num_faces; i++)
     {
-        FlatVertices[i*3    ] = vertices[indices[i*3]];
-        FlatVertices[i*3 + 1] = vertices[indices[i*3 +1]];
-        FlatVertices[i*3 + 2] = vertices[indices[i*3 +1]];
+        FlatVertices[i*3    ] = vertices[indices[i*3]   ];
+        FlatVertices[i*3 + 1] = vertices[indices[i*3 + 1]];
+        FlatVertices[i*3 + 2] = vertices[indices[i*3 + 2]];
 
         FlatNormal[i*3    ] = normal[i];
         FlatNormal[i*3 + 1] = normal[i];
@@ -223,7 +223,7 @@ void OpenGL::UseFlatShading(){
     m_shaderProgram->enableAttributeArray("vNormal");
     m_shaderProgram->setAttributeBuffer("vNormal",GL_FLOAT,0,3,0);
 
-    glDrawArrays( GL_TRIANGLE_STRIP, 0, offr->num_faces * 3 );
+    glDrawArrays( GL_TRIANGLES, 0, offr->num_faces * 3 );
 
     //DEBUG GL_TRIANGLE_STRIP
     //glDrawElements( GL_LINES, 4, GL_UNSIGNED_INT, indices);
