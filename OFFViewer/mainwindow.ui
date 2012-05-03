@@ -1222,6 +1222,11 @@
       </item>
       <item>
        <property name="text">
+        <string>Two lights</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>Phong Half-Way Vector</string>
        </property>
       </item>

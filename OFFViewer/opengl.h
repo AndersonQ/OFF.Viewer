@@ -95,6 +95,7 @@ protected:
     void initFlatShading();
     void initGouraudShading();
     void initPhong();
+    void initPhong2();
     void initPhongHalf();
     void initCartoon();
     void initSimpleTexMapping();
@@ -104,6 +105,7 @@ protected:
     void UseFlatShading();
     void UseGouraud();
     void UsePhong();
+    void UsePhong2();
     void UsePhongHalf();
     void UseCartoon();
     void UseSimpleTexMapping();

@@ -50,4 +50,5 @@ OTHER_FILES += \
     Shaders/fshader.Cube.Mapping.glsl \
     Shaders/vshader.Cube.Mapping.glsl \
     Shaders/vshader.Normal.Mapping.glsl \
-    Shaders/fshader.Normal.Mapping.glsl
+    Shaders/fshader.Normal.Mapping.glsl \
+    Shaders/fshader.Phong2.glsl
