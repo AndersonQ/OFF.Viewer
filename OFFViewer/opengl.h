@@ -195,6 +195,7 @@ public slots:
     void SetLightEyecx(double i);
     void SetLightEyecy(double i);
     void SetLightEyecz(double i);
+    void SetShin(int s);
 };
 
 #endif // OPENGL_H

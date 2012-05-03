@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>621</width>
-    <height>664</height>
+    <width>601</width>
+    <height>636</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1183,7 +1183,7 @@
       <x>370</x>
       <y>300</y>
       <width>221</width>
-      <height>291</height>
+      <height>271</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -1349,6 +1349,32 @@
       </property>
       <property name="checked">
        <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QSlider" name="horizontalSlider_22">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>220</y>
+        <width>201</width>
+        <height>19</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_33">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>200</y>
+        <width>67</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Shininess</string>
       </property>
      </widget>
     </widget>
@@ -1756,7 +1782,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>621</width>
+     <width>601</width>
      <height>25</height>
     </rect>
    </property>
@@ -1859,6 +1885,7 @@
     <slot>SetLightEyecx(double)</slot>
     <slot>SetLightEyecy(double)</slot>
     <slot>SetLightEyecz(double)</slot>
+    <slot>SetShin(int)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -2769,6 +2796,22 @@
     <hint type="sourcelabel">
      <x>299</x>
      <y>440</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>184</x>
+     <y>179</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_22</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>widget</receiver>
+   <slot>SetShin(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>482</x>
+     <y>575</y>
     </hint>
     <hint type="destinationlabel">
      <x>184</x>

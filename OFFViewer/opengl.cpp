@@ -1863,3 +1863,9 @@ void OpenGL::SetLightEyecz(double i){
     updateGL();
 }
 
+void OpenGL::SetShin(int s){
+    material.shininess = (float) s;
+
+    updateGL();
+}
+
