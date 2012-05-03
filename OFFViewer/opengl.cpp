@@ -223,6 +223,16 @@ void OpenGL::UseFlatShading(){
     m_shaderProgram->enableAttributeArray("vNormal");
     m_shaderProgram->setAttributeBuffer("vNormal",GL_FLOAT,0,3,0);
 
+    QVector4D ambient_product  = light.ambient * material.ambient;
+    QVector4D diffuse_product  = light.diffuse * material.diffuse;
+    QVector4D specular_product = light.specular * material.specular;
+
+    m_shaderProgram->setUniformValue("AmbientProduct",ambient_product);
+    m_shaderProgram->setUniformValue("DiffuseProduct",diffuse_product);
+    m_shaderProgram->setUniformValue("SpecularProduct",specular_product);
+    m_shaderProgram->setUniformValue("LightPosition",light.position);
+    m_shaderProgram->setUniformValue("Shininess",material.shininess);
+
     glDrawArrays( GL_TRIANGLES, 0, offr->num_faces * 3 );
 
     //DEBUG GL_TRIANGLE_STRIP
@@ -295,6 +305,16 @@ void OpenGL::UseGouraud(){
     m_shaderProgram->setUniformValue("Shininess",material.shininess);
 
     m_vboIndices->bind();
+
+    QVector4D ambient_product  = light.ambient * material.ambient;
+    QVector4D diffuse_product  = light.diffuse * material.diffuse;
+    QVector4D specular_product = light.specular * material.specular;
+
+    m_shaderProgram->setUniformValue("AmbientProduct",ambient_product);
+    m_shaderProgram->setUniformValue("DiffuseProduct",diffuse_product);
+    m_shaderProgram->setUniformValue("SpecularProduct",specular_product);
+    m_shaderProgram->setUniformValue("LightPosition",light.position);
+    m_shaderProgram->setUniformValue("Shininess",material.shininess);
 
     glDrawElements(GL_TRIANGLES, 3*offr->num_faces, GL_UNSIGNED_INT, 0);
 
@@ -369,6 +389,16 @@ void OpenGL::UsePhong(){
 
     m_vboIndices->bind();
 
+    QVector4D ambient_product  = light.ambient * material.ambient;
+    QVector4D diffuse_product  = light.diffuse * material.diffuse;
+    QVector4D specular_product = light.specular * material.specular;
+
+    m_shaderProgram->setUniformValue("AmbientProduct",ambient_product);
+    m_shaderProgram->setUniformValue("DiffuseProduct",diffuse_product);
+    m_shaderProgram->setUniformValue("SpecularProduct",specular_product);
+    m_shaderProgram->setUniformValue("LightPosition",light.position);
+    m_shaderProgram->setUniformValue("Shininess",material.shininess);
+
     glDrawElements(GL_TRIANGLES, 3*( offr->num_faces ), GL_UNSIGNED_INT, 0);
 
     m_vboVertices->release();
@@ -440,6 +470,16 @@ void OpenGL::UsePhongHalf(){
     m_shaderProgram->setUniformValue("Shininess",material.shininess);
 
     m_vboIndices->bind();
+
+    QVector4D ambient_product  = light.ambient * material.ambient;
+    QVector4D diffuse_product  = light.diffuse * material.diffuse;
+    QVector4D specular_product = light.specular * material.specular;
+
+    m_shaderProgram->setUniformValue("AmbientProduct",ambient_product);
+    m_shaderProgram->setUniformValue("DiffuseProduct",diffuse_product);
+    m_shaderProgram->setUniformValue("SpecularProduct",specular_product);
+    m_shaderProgram->setUniformValue("LightPosition",light.position);
+    m_shaderProgram->setUniformValue("Shininess",material.shininess);
 
     glDrawElements(GL_TRIANGLES, 3*( offr->num_faces ), GL_UNSIGNED_INT, 0);
 
@@ -515,6 +555,16 @@ void OpenGL::UseCartoon(){
     m_shaderProgram->setAttributeBuffer("vNormal",GL_FLOAT,0,3,0);
 
     m_vboIndices->bind();
+
+    QVector4D ambient_product  = light.ambient * material.ambient;
+    QVector4D diffuse_product  = light.diffuse * material.diffuse;
+    QVector4D specular_product = light.specular * material.specular;
+
+    m_shaderProgram->setUniformValue("AmbientProduct",ambient_product);
+    m_shaderProgram->setUniformValue("DiffuseProduct",diffuse_product);
+    m_shaderProgram->setUniformValue("SpecularProduct",specular_product);
+    m_shaderProgram->setUniformValue("LightPosition",light.position);
+    m_shaderProgram->setUniformValue("Shininess",material.shininess);
 
     glDrawElements(GL_TRIANGLES, 3*( offr->num_faces ), GL_UNSIGNED_INT, 0);
 
@@ -600,12 +650,12 @@ void OpenGL::initCubeMapping(){
 
     LoadShaders(":/Shaders/vshader.Cube.Mapping.glsl",":/Shaders/fshader.Cube.Mapping.glsl");
 
-    img[0] = QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/negx.png","PNG");
-    img[1] = QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/negy.png","PNG");
-    img[2] = QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/negz.png","PNG");
-    img[3] = QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/posx.png","PNG");
-    img[4] = QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/posy.png","PNG");
-    img[5] = QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/posz.png","PNG");
+    img[0] = QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/negx.jpg","JPG");
+    img[1] = QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/negy.jpg","JPG");
+    img[2] = QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/negz.jpg","JPG");
+    img[3] = QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/posx.jpg","JPG");
+    img[4] = QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/posy.jpg","JPG");
+    img[5] = QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/posz.jpg","JPG");
 
     if(m_vboVertices) delete m_vboVertices;
     m_vboVertices = new QGLBuffer(QGLBuffer::VertexBuffer);
@@ -673,12 +723,12 @@ void OpenGL::initNormalMapping(){
     CreateVertexIndices();
     CalculateNormalVertices();
 
-    if(texColor) delete texColor;
+    //if(texColor) delete texColor;
     if(texNormal) delete texNormal;
 
     SelectedImage = 2;
     ChooseTexture();
-    texNormal = new QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/fieldstone-c.jpg","JPG");
+    //texNormal = new QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/fieldstone-c.jpg","JPG");
     texNormal = new QImage("/media/Mokona/UFABC/10-Quad/Computacao.Grafica/Proj2/OFF.Viewer/OFFViewer/Textures/fieldstone-n.jpg","JPG");
     ChooseCoordinates();
     genTangentFrames();
@@ -789,6 +839,16 @@ void OpenGL::UseNormalMapping(){
 
     m_vboIndices->bind();
 
+    QVector4D ambient_product = light.ambient * material.ambient;
+    QVector4D diffuse_product = light.diffuse * material.diffuse;
+    QVector4D specular_product = light.specular * material.specular;
+
+    m_shaderProgram->setUniformValue("LightPosition",light.position);
+    m_shaderProgram->setUniformValue("AmbientProduct",ambient_product);
+    m_shaderProgram->setUniformValue("DiffuseProduct",diffuse_product);
+    m_shaderProgram->setUniformValue("SpecularProduct",specular_product);
+    m_shaderProgram->setUniformValue("Shininess",material.shininess);
+
     glDrawElements(GL_TRIANGLES, offr->num_faces * 3, GL_UNSIGNED_INT, 0);
 
     m_vboVertices->release();
@@ -829,7 +889,13 @@ void OpenGL::ChooseCoordinates(){
     switch(SelectedCoord)
     {
         case 0:
-            GenTexCoordsCylinder();
+            genTexCoordsCylinder();
+            break;
+        case 1:
+            genTexCoordsSphere();
+            break;
+        case 2:
+            genTexCoordsTriangles();
             break;
         default:
             printf("ERROR: SelectedCoord = %d\n", SelectedImage);
@@ -838,7 +904,7 @@ void OpenGL::ChooseCoordinates(){
     }
 }
 
-void OpenGL::GenTexCoordsCylinder(){
+void OpenGL::genTexCoordsCylinder(){
 
     double max_x = -1e10, min_x = 1e10;
     double max_y = -1e10, min_y = 1e10;
@@ -866,6 +932,50 @@ void OpenGL::GenTexCoordsCylinder(){
         texcoords[i] = QVector2D(u,v);
     }
 
+}
+
+void OpenGL::genTexCoordsSphere()
+{
+    double max_x = -1e10, min_x = 1e10;
+    double max_y = -1e10, min_y = 1e10;
+    double max_z = -1e10, min_z = 1e10;
+    double u,v;
+    int i;
+
+    if(texcoords) delete [] texcoords;
+    texcoords = new QVector2D [offr->num_vertices];
+
+    for(i = 0; i < offr->num_vertices; i++)
+    {
+        if(vertices[i].x() > max_x) max_x = vertices[i].x();
+        if(vertices[i].x() < min_x) min_x = vertices[i].x();
+        if(vertices[i].y() > max_y) max_y = vertices[i].y();
+        if(vertices[i].y() < min_y) min_y = vertices[i].y();
+        if(vertices[i].z() > max_z) max_z = vertices[i].z();
+        if(vertices[i].z() < min_z) min_z = vertices[i].z();
+    }
+
+    for(i = 0; i < offr->num_vertices;i++)
+    {
+        //http://www.mvps.org/directx/articles/spheremap.htm
+        u = ::asin(normal[i].x())/3.14 + 0.5;
+        v = ::asin(normal[i].y())/3.14 + 0.5;
+
+        texcoords[i] = QVector2D(u,v);
+    }
+}
+
+void OpenGL::genTexCoordsTriangles()
+{
+    int i;
+
+    if(texcoords) delete [] texcoords;
+    texcoords = new QVector2D [offr->num_vertices];
+
+    for(i = 0; i < offr->num_vertices;i++)
+    {
+        texcoords[i] = QVector2D((i+1.0)/(offr->num_vertices),(i+1.0)/(offr->num_vertices));
+    }
 }
 
 //http://www.terathon.com/code/tangent.html
@@ -1416,3 +1526,100 @@ void OpenGL::SetShader(int s){
     Shader = s;
     ChangeShader(s);
 }
+
+void OpenGL::SetCoordnates(int c){
+    SelectedCoord = c;
+    ChangeShader(Shader);
+}
+
+void OpenGL::SetTexture(int t){
+    SelectedImage = t;
+    ChangeShader(Shader);
+}
+
+void OpenGL::SetMatAmbx(int i){
+    material.ambient.setX(i/255.0);
+    updateGL();
+}
+
+void OpenGL::SetMatAmby(int i){
+    material.ambient.setY(i/255.0);
+    updateGL();
+}
+void OpenGL::SetMatAmbz(int i){
+    material.ambient.setZ(i/255.0);
+    updateGL();
+}
+void OpenGL::SetMatDifx(int i){
+    material.diffuse.setX(i/255.0);
+    updateGL();
+}
+void OpenGL::SetMatDify(int i){
+    material.diffuse.setX(i/255.0);
+    updateGL();
+}
+void OpenGL::SetMatDifz(int i){
+    material.diffuse.setX(i/255.0);
+    updateGL();
+}
+void OpenGL::SetMatSpecx(int i){
+    material.specular.setX(i/255.0);
+    updateGL();
+}
+void OpenGL::SetMatSpecy(int i){
+    material.specular.setX(i/255.0);
+    updateGL();
+}
+void OpenGL::SetMatSpecz(int i){
+    material.specular.setX(i/255.0);
+    updateGL();
+}
+void OpenGL::SetLightAmbx(int i){
+    light.ambient.setX(i/255.0);
+    updateGL();
+}
+void OpenGL::SetLightAmby(int i){
+    light.ambient.setX(i/255.0);
+    updateGL();
+}
+void OpenGL::SetLightAmbz(int i){
+    light.ambient.setX(i/255.0);
+    updateGL();
+}
+void OpenGL::SetLightDifx(int i){
+    light.diffuse.setX(i/255.0);
+    updateGL();
+}
+void OpenGL::SetLightDify(int i){
+    light.diffuse.setX(i/255.0);
+    updateGL();
+}
+void OpenGL::SetLightDifz(int i){
+    light.diffuse.setX(i/255.0);
+    updateGL();
+}
+void OpenGL::SetLightSpecx(int i){
+    light.specular.setX(i/255.0);
+    updateGL();
+}
+void OpenGL::SetLightSpecy(int i){
+    light.specular.setX(i/255.0);
+    updateGL();
+}
+void OpenGL::SetLightSpecz(int i){
+    light.specular.setX(i/255.0);
+    updateGL();
+}
+void OpenGL::SetLightEyecx(double i){
+    light.position.setX(i);
+    updateGL();
+}
+void OpenGL::SetLightEyecy(double i){
+    light.position.setX(i);
+    updateGL();
+}
+void OpenGL::SetLightEyecz(double i){
+    light.position.setX(i);
+    updateGL();
+}
+

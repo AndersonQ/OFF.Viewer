@@ -114,9 +114,9 @@ protected:
 
     void ChooseTexture();
     void ChooseCoordinates();
-    void GenTexCoordsCylinder();
-    void GenTexCoordsSphere();
-    void GenTexCoordsTriangles();
+    void genTexCoordsCylinder();
+    void genTexCoordsSphere();
+    void genTexCoordsTriangles();
     void genTangentFrames();
 
     void ChangeShader(int s);
@@ -168,7 +168,29 @@ public slots:
     void SetBgGreen(int g);
     void SetBgBlue(int b);
     void SetShader(int s);
-
+    void SetCoordnates(int c);
+    void SetTexture(int t);
+    void SetMatAmbx(int i);
+    void SetMatAmby(int i);
+    void SetMatAmbz(int i);
+    void SetMatDifx(int i);
+    void SetMatDify(int i);
+    void SetMatDifz(int i);
+    void SetMatSpecx(int i);
+    void SetMatSpecy(int i);
+    void SetMatSpecz(int i);
+    void SetLightAmbx(int i);
+    void SetLightAmby(int i);
+    void SetLightAmbz(int i);
+    void SetLightDifx(int i);
+    void SetLightDify(int i);
+    void SetLightDifz(int i);
+    void SetLightSpecx(int i);
+    void SetLightSpecy(int i);
+    void SetLightSpecz(int i);
+    void SetLightEyecx(double i);
+    void SetLightEyecy(double i);
+    void SetLightEyecz(double i);
 };
 
 #endif // OPENGL_H
